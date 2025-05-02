@@ -1,14 +1,14 @@
 "use client";
 
-import * as React from "react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 const toolCategories = [
   {
@@ -17,7 +17,10 @@ const toolCategories = [
       { name: "Text Hasher", href: "/tools/security/hasher" },
       { name: "JWT Encoder/Decoder", href: "/tools/security/jwt" },
       { name: "Password Strength", href: "/tools/security/password-strength" },
-      { name: "Password Generator", href: "/tools/security/password-generator" },
+      {
+        name: "Password Generator",
+        href: "/tools/security/password-generator",
+      },
     ],
   },
   {
@@ -27,6 +30,13 @@ const toolCategories = [
       { name: "JSON ↔ CSV", href: "/tools/conversion/json-csv" },
       { name: "Base64 Encoder/Decoder", href: "/tools/conversion/base64" },
       { name: "URL Encoder/Decoder", href: "/tools/conversion/url" },
+      { name: "Image Converter", href: "/tools/conversion/image-converter" },
+      { name: "Text Diff Checker", href: "/tools/conversion/text-diff" },
+      {
+        name: "Character Counter",
+        href: "/tools/conversion/character-counter",
+      },
+      { name: "Lorem Ipsum Generator", href: "/tools/conversion/lorem-ipsum" },
     ],
   },
   {
@@ -36,15 +46,35 @@ const toolCategories = [
       { name: "JSON Formatter", href: "/tools/web/json-formatter" },
       { name: "Regex Tester", href: "/tools/web/regex" },
       { name: "HTTP Request Tester", href: "/tools/web/http-request" },
+      { name: "Link Previewer", href: "/tools/web/link-preview" },
+      { name: "CSS Minifier", href: "/tools/web/css-minifier" },
+      {
+        name: "CSS / Tailwind Unit Converter",
+        href: "/tools/web/css-tailwind-unit-converter",
+      },
     ],
   },
   {
     title: "Visual & UI Tools",
     items: [
       { name: "Color Picker", href: "/tools/visual/color-picker" },
-      { name: "CSS Gradient Generator", href: "/tools/visual/gradient-generator" },
+      {
+        name: "COLOR PALET GENERATOR",
+        href: "/tools/visual/color-palet-generator",
+      },
+      {
+        name: "CSS Gradient Generator",
+        href: "/tools/visual/gradient-generator",
+      },
+      { name: "Box Shadow", href: "/tools/visual/box-shadow" },
+      {
+        name: "Grid Layout Generator",
+        href: "/tools/visual/grid-layout-generator",
+      },
       { name: "Markdown Previewer", href: "/tools/visual/markdown" },
       { name: "Image to Base64", href: "/tools/visual/image-base64" },
+      { name: "Image Compressor", href: "/tools/visual/image-compressor" },
+      { name: "Sprite Generator", href: "/tools/visual/sprite-generator" },
     ],
   },
 ];
@@ -60,7 +90,10 @@ export function MainNav() {
   return (
     <div className="flex items-center justify-between py-4 md:py-6 px-4 md:px-6 border-b w-full bg-background">
       <div className="flex items-center gap-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-semibold text-lg"
+        >
           <span className="hidden sm:inline">DevToolkit</span>
         </Link>
 
@@ -103,7 +136,10 @@ export function MainNav() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs">
+          <SheetContent
+            side="left"
+            className="w-full max-w-xs overflow-y-auto max-h-screen"
+          >
             <div className="flex flex-col gap-6 pt-6">
               <Link
                 href="/"
