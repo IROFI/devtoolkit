@@ -2,7 +2,7 @@
 
 import { Menu, Search } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -79,25 +79,137 @@ const toolCategories = [
   },
 ];
 
+function flattenTools() {
+  return toolCategories.flatMap((category) =>
+    category.items.map((item) => ({
+      ...item,
+      category: category.title,
+    }))
+  );
+}
+
 function NavbarSearchBar() {
+  const router = useRouter();
+  const [query, setQuery] = React.useState("");
+  const [showResults, setShowResults] = React.useState(false);
+  const [focusedIdx, setFocusedIdx] = React.useState(-1);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const resultsRef = React.useRef<HTMLDivElement>(null);
+
+  const tools = React.useMemo(flattenTools, []);
+  const filtered =
+    query.trim().length === 0
+      ? []
+      : tools.filter(
+          (tool) =>
+            tool.name.toLowerCase().includes(query.toLowerCase()) ||
+            tool.category.toLowerCase().includes(query.toLowerCase())
+        );
+
+  // Fermer la liste si on clique ailleurs
+  React.useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (
+        !inputRef.current?.contains(e.target as Node) &&
+        !resultsRef.current?.contains(e.target as Node)
+      ) {
+        setShowResults(false);
+        setFocusedIdx(-1);
+      }
+    }
+    if (showResults) {
+      document.addEventListener("mousedown", handleClick);
+    }
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showResults]);
+
+  // Navigation clavier
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (!showResults || filtered.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setFocusedIdx((idx) => (idx + 1) % filtered.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setFocusedIdx((idx) => (idx - 1 + filtered.length) % filtered.length);
+    } else if (e.key === "Enter" && focusedIdx >= 0) {
+      e.preventDefault();
+      router.push(filtered[focusedIdx].href);
+      setShowResults(false);
+      setQuery("");
+      setFocusedIdx(-1);
+    }
+  }
+
   return (
-    <form
-      className="flex items-center gap-2 max-w-xs bg-white dark:bg-muted rounded-full px-3 py-1 border shadow-sm"
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <button
-        type="submit"
-        className="text-muted-foreground hover:text-primary transition p-0.5"
+    <div className="relative">
+      <form
+        className="flex items-center gap-2 max-w-xs bg-white dark:bg-muted rounded-full px-3 py-1 border shadow-sm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (filtered.length > 0) {
+            router.push(filtered[0].href);
+            setShowResults(false);
+            setQuery("");
+            setFocusedIdx(-1);
+          }
+        }}
+        autoComplete="off"
       >
-        <Search size={18} />
-      </button>
-      <input
-        type="text"
-        placeholder="Rechercher..."
-        className="flex-1 bg-transparent border-none focus:outline-none px-1 py-1 text-sm rounded-full"
-        aria-label="Rechercher"
-      />
-    </form>
+        <button
+          type="submit"
+          className="text-muted-foreground hover:text-primary transition p-0.5"
+          tabIndex={-1}
+        >
+          <Search size={18} />
+        </button>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Rechercher..."
+          className="flex-1 bg-transparent border-none focus:outline-none px-1 py-1 text-sm rounded-full"
+          aria-label="Rechercher"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowResults(true);
+            setFocusedIdx(-1);
+          }}
+          onFocus={() => {
+            if (query.trim().length > 0) setShowResults(true);
+          }}
+          onKeyDown={handleKeyDown}
+        />
+      </form>
+      {showResults && filtered.length > 0 && (
+        <div
+          ref={resultsRef}
+          className="absolute left-0 mt-2 w-full bg-popover border rounded-lg shadow-lg z-50 max-h-64 overflow-auto"
+        >
+          {filtered.map((tool, idx) => (
+            <button
+              key={tool.href}
+              className={`w-full text-left px-4 py-2 text-sm hover:bg-secondary focus:bg-secondary rounded-md ${
+                idx === focusedIdx ? "bg-secondary" : ""
+              }`}
+              onClick={() => {
+                router.push(tool.href);
+                setShowResults(false);
+                setQuery("");
+                setFocusedIdx(-1);
+              }}
+              onMouseEnter={() => setFocusedIdx(idx)}
+              tabIndex={-1}
+            >
+              <span className="font-medium">{tool.name}</span>
+              <span className="ml-2 text-muted-foreground text-xs">
+                {tool.category}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
