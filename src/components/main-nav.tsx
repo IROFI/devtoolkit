@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -79,6 +79,28 @@ const toolCategories = [
   },
 ];
 
+function NavbarSearchBar() {
+  return (
+    <form
+      className="flex items-center gap-2 max-w-xs bg-white dark:bg-muted rounded-full px-3 py-1 border shadow-sm"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <button
+        type="submit"
+        className="text-muted-foreground hover:text-primary transition p-0.5"
+      >
+        <Search size={18} />
+      </button>
+      <input
+        type="text"
+        placeholder="Rechercher..."
+        className="flex-1 bg-transparent border-none focus:outline-none px-1 py-1 text-sm rounded-full"
+        aria-label="Rechercher"
+      />
+    </form>
+  );
+}
+
 export function MainNav() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -127,6 +149,9 @@ export function MainNav() {
       </div>
 
       <div className="flex items-center gap-2">
+        <div className="hidden md:block">
+          <NavbarSearchBar />
+        </div>
         <ThemeToggle />
 
         <Sheet open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -141,6 +166,7 @@ export function MainNav() {
             className="w-full max-w-xs overflow-y-auto max-h-screen"
           >
             <div className="flex flex-col gap-6 pt-6">
+              <NavbarSearchBar />
               <Link
                 href="/"
                 className="flex items-center gap-2 font-semibold text-lg"
