@@ -16,7 +16,7 @@ export default function GridLayoutGeneratorPage() {
   const [columnTemplate, setColumnTemplate] = useState("1fr 1fr 1fr");
   const [rowTemplate, setRowTemplate] = useState("auto auto");
 
-  // Génère le CSS grid
+  // Generates the CSS grid
   const gridCss = `
 display: grid;
 grid-template-columns: ${columnTemplate};
@@ -27,14 +27,14 @@ gap: ${gap}px;`.trim();
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success(`${label} copié dans le presse-papier`);
+        toast.success(`${label} copied to clipboard`);
       })
       .catch(() => {
-        toast.error("Erreur lors de la copie");
+        toast.error("Copy error");
       });
   };
 
-  // Met à jour automatiquement les templates si le nombre de colonnes/lignes change
+  // Automatically update templates if columns/rows count changes
   const handleColumnsChange = (value: number) => {
     setColumns(value);
     setColumnTemplate(Array(value).fill("1fr").join(" "));
@@ -46,14 +46,14 @@ gap: ${gap}px;`.trim();
 
   return (
     <ToolLayout
-      title="Générateur de grid layout"
-      description="Générez facilement la propriété CSS grid. Ajustez les paramètres et copiez le CSS."
+      title="Grid Layout Generator"
+      description="Easily generate the CSS grid property. Adjust parameters and copy the CSS."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Colonnes</Label>
+              <Label className="mb-1 w-32">Columns</Label>
               <Input
                 type="number"
                 min={1}
@@ -63,7 +63,7 @@ gap: ${gap}px;`.trim();
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Lignes</Label>
+              <Label className="mb-1 w-32">Rows</Label>
               <Input
                 type="number"
                 min={1}
@@ -83,7 +83,7 @@ gap: ${gap}px;`.trim();
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Template colonnes</Label>
+              <Label className="mb-1 w-32">Column template</Label>
               <Input
                 value={columnTemplate}
                 onChange={(e) => setColumnTemplate(e.target.value)}
@@ -91,7 +91,7 @@ gap: ${gap}px;`.trim();
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Template lignes</Label>
+              <Label className="mb-1 w-32">Row template</Label>
               <Input
                 value={rowTemplate}
                 onChange={(e) => setRowTemplate(e.target.value)}
@@ -100,7 +100,7 @@ gap: ${gap}px;`.trim();
             </div>
           </div>
           <div>
-            <Label className="text-sm mb-2 block">CSS du grid</Label>
+            <Label className="text-sm mb-2 block">Grid CSS</Label>
             <div className="flex items-center gap-2">
               <Input value={gridCss} readOnly className="font-mono text-xs" />
               <Button
@@ -116,7 +116,7 @@ gap: ${gap}px;`.trim();
         <div className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <Label className="text-sm mb-2 block">Aperçu du grid</Label>
+              <Label className="text-sm mb-2 block">Grid preview</Label>
               <div
                 className="w-full h-64 rounded border flex items-center justify-center overflow-auto"
                 style={{
@@ -145,7 +145,7 @@ gap: ${gap}px;`.trim();
                       minHeight: 40,
                     }}
                   >
-                    Cellule {i + 1}
+                    Cell {i + 1}
                   </div>
                 ))}
               </div>

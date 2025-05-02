@@ -26,7 +26,7 @@ const TAILWIND_MAP: Record<Unit, (value: number) => string | null> = {
     return TAILWIND_MAP.px(px);
   },
   em: (v) => {
-    // 1em = 16px (par défaut)
+    // 1em = 16px (default)
     const px = v * 16;
     return TAILWIND_MAP.px(px);
   },
@@ -46,8 +46,8 @@ const TAILWIND_MAP: Record<Unit, (value: number) => string | null> = {
 };
 
 function convertAllUnits(value: number, from: Unit) {
-  // Conversion de base: px <-> rem/em (1rem = 16px), %/vw/vh arbitraire (100% = 100vw = 100vh = 16px pour l'exemple)
-  // Pour %/vw/vh, on suppose 100% = 100vw = 100vh = 16px (pour donner un résultat, à adapter selon contexte réel)
+  // Basic conversion: px <-> rem/em (1rem = 16px), %/vw/vh arbitrary (100% = 100vw = 100vh = 16px for example)
+  // For %/vw/vh, we assume 100% = 100vw = 100vh = 16px (for demonstration, adapt for real context)
   let px: number;
   switch (from) {
     case "px":
@@ -88,26 +88,26 @@ export default function CssUnitConverterPage() {
 
   const handleConvert = () => {
     if (number === "" || isNaN(Number(number))) {
-      toast.warning("Veuillez entrer un nombre valide.");
+      toast.warning("Please enter a valid number.");
       setConverted({} as any);
       return;
     }
     const result = convertAllUnits(Number(number), unit);
     setConverted(result as Record<Unit, number>);
-    toast.success("Conversion effectuée !");
+    toast.success("Conversion done!");
   };
 
   const fillExample = () => {
     setNumber(16);
     setUnit("px");
     setConverted({});
-    toast.info("Exemple chargé !");
+    toast.info("Example loaded!");
   };
 
   return (
     <ToolLayout
-      title="Convertisseur d'unités CSS & Tailwind"
-      description="Entrez une valeur et une unité, obtenez la conversion dans toutes les unités CSS courantes et leur équivalent Tailwind."
+      title="CSS & Tailwind Unit Converter"
+      description="Enter a value and a unit, get the conversion in all common CSS units and their Tailwind equivalent."
     >
       <div className="grid gap-8">
         <Card>
@@ -115,22 +115,22 @@ export default function CssUnitConverterPage() {
             <div className="grid gap-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium">
-                  Convertisseur d'unités CSS & Tailwind
+                  CSS & Tailwind Unit Converter
                 </h3>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={fillExample}
                   className="h-8 px-2"
-                  title="Charger un exemple"
+                  title="Load example"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Exemple
+                  Example
                 </Button>
               </div>
               <div className="flex flex-col md:flex-row gap-2 items-end">
                 <div className="flex flex-col flex-1">
-                  <Label htmlFor="number-input">Valeur</Label>
+                  <Label htmlFor="number-input">Value</Label>
                   <input
                     id="number-input"
                     type="number"
@@ -145,7 +145,7 @@ export default function CssUnitConverterPage() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <Label htmlFor="unit-select">Unité</Label>
+                  <Label htmlFor="unit-select">Unit</Label>
                   <select
                     id="unit-select"
                     value={unit}
@@ -160,7 +160,7 @@ export default function CssUnitConverterPage() {
                   </select>
                 </div>
                 <Button onClick={handleConvert} disabled={number === ""}>
-                  Convertir
+                  Convert
                 </Button>
               </div>
               {converted && Object.keys(converted).length > 0 && (
@@ -189,9 +189,8 @@ export default function CssUnitConverterPage() {
                   </div>
                   <div className="text-xs text-gray-500 mt-2">
                     <span>
-                      * Les conversions %/vw/vh sont basées sur 16px =
-                      100%/100vw/100vh (exemple, à adapter selon le contexte
-                      réel).
+                      * %/vw/vh conversions are based on 16px = 100%/100vw/100vh
+                      (example, adapt for real context).
                     </span>
                   </div>
                 </div>

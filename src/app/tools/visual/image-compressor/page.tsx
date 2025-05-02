@@ -32,7 +32,7 @@ export default function ImageCompressorPage() {
       compressImage(reader.result as string, quality);
     };
     reader.onerror = () => {
-      toast.error("Erreur lors de la lecture du fichier");
+      toast.error("Error while reading the file");
     };
     reader.readAsDataURL(file);
   };
@@ -45,7 +45,7 @@ export default function ImageCompressorPage() {
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
       if (!ctx) {
-        toast.error("Erreur lors de la compression");
+        toast.error("Error during compression");
         return;
       }
       ctx.drawImage(img, 0, 0);
@@ -59,7 +59,7 @@ export default function ImageCompressorPage() {
       setCompressedSize(sizeInBytes);
     };
     img.onerror = () => {
-      toast.error("Erreur lors du chargement de l'image");
+      toast.error("Error loading the image");
     };
     img.src = dataUrl;
   };
@@ -82,8 +82,8 @@ export default function ImageCompressorPage() {
 
   return (
     <ToolLayout
-      title="Compresseur d'image"
-      description="Compressez vos images facilement et téléchargez-les."
+      title="Image Compressor"
+      description="Easily compress your images and download them."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -102,26 +102,26 @@ export default function ImageCompressorPage() {
               onClick={() => fileInputRef.current?.click()}
             >
               <ImageIcon className="h-4 w-4 mr-1" />
-              Choisir une image
+              Choose an image
             </Button>
           </div>
           {originalUrl && (
             <div className="mb-4">
-              <Label className="text-xs mb-1 block">Aperçu original</Label>
+              <Label className="text-xs mb-1 block">Original preview</Label>
               <img
                 src={originalUrl}
-                alt="Aperçu original"
+                alt="Original preview"
                 className="max-h-48 rounded border"
               />
               <div className="text-xs mt-1 text-muted-foreground">
-                Taille : {(originalSize / 1024).toFixed(2)} Ko
+                Size: {(originalSize / 1024).toFixed(2)} KB
               </div>
             </div>
           )}
           {originalUrl && (
             <div className="mb-4">
               <Label className="text-xs mb-1 block">
-                Qualité de compression : {(quality * 100).toFixed(0)}%
+                Compression quality: {(quality * 100).toFixed(0)}%
               </Label>
               <input
                 type="range"
@@ -139,13 +139,13 @@ export default function ImageCompressorPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <Label className="text-sm">Image compressée</Label>
+                <Label className="text-sm">Compressed image</Label>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={downloadCompressed}
                   disabled={!compressedUrl}
-                  title="Télécharger"
+                  title="Download"
                 >
                   <Download className="h-4 w-4" />
                 </Button>
@@ -154,16 +154,16 @@ export default function ImageCompressorPage() {
                 <>
                   <img
                     src={compressedUrl}
-                    alt="Image compressée"
+                    alt="Compressed image"
                     className="max-h-48 rounded border mb-2"
                   />
                   <div className="text-xs text-muted-foreground mb-2">
-                    Taille : {(compressedSize / 1024).toFixed(2)} Ko
+                    Size: {(compressedSize / 1024).toFixed(2)} KB
                   </div>
                 </>
               ) : (
                 <div className="text-xs text-muted-foreground">
-                  L'image compressée apparaîtra ici...
+                  The compressed image will appear here...
                 </div>
               )}
             </CardContent>

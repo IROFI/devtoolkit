@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 
-// Fonction pour convertir hex en RGB
+// Function to convert hex to RGB
 const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -22,13 +22,13 @@ const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
     : null;
 };
 
-// Fonction pour convertir RGB en HSL
+// Function to convert RGB to HSL
 const rgbToHsl = (
   red: number,
   green: number,
   blue: number
 ): { h: number; s: number; l: number } => {
-  // Normaliser les valeurs RGB dans la plage 0-1
+  // Normalize RGB values to 0-1 range
   const r = red / 255;
   const g = green / 255;
   const b = blue / 255;
@@ -112,12 +112,12 @@ const hslToHex = (h: number, s: number, l: number): string => {
   );
 };
 
-// Générer une palette de 5 couleurs (variation de la luminosité)
+// Generate a palette of 5 colors by varying the lightness
 const generatePalette = (baseHex: string) => {
   const rgb = hexToRgb(baseHex);
   if (!rgb) return [];
   const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-  // Générer 5 couleurs en variant la luminosité
+  // Generate 5 colors by varying the lightness
   const steps = [-30, -15, 0, 15, 30];
   return steps.map((delta, idx) => {
     const l = Math.max(0, Math.min(100, hsl.l + delta));
@@ -146,17 +146,17 @@ export default function ColorPaletteGeneratorPage() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success(`${label} copié dans le presse-papier`);
+        toast.success(`${label} copied to clipboard`);
       })
       .catch(() => {
-        toast.error("Erreur lors de la copie");
+        toast.error("Copy error");
       });
   };
 
   return (
     <ToolLayout
-      title="Générateur de palette"
-      description="Générez une palette de couleurs à partir d'une couleur de base. Copiez les formats HEX, RGB, HSL."
+      title="Palette Generator"
+      description="Generate a color palette from a base color. Copy HEX, RGB, HSL formats."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -175,7 +175,7 @@ export default function ColorPaletteGeneratorPage() {
             </div>
           </div>
           <div>
-            <Label className="text-sm mb-2 block">Palette générée</Label>
+            <Label className="text-sm mb-2 block">Generated palette</Label>
             <div className="grid grid-cols-1 gap-4">
               {palette.map((swatch) => (
                 <Card key={swatch.key}>
@@ -246,7 +246,7 @@ export default function ColorPaletteGeneratorPage() {
         <div className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <Label className="text-sm mb-2 block">Aperçu de la palette</Label>
+              <Label className="text-sm mb-2 block">Palette preview</Label>
               <div className="flex gap-2">
                 {palette.map((swatch) => (
                   <div

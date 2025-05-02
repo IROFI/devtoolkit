@@ -24,7 +24,7 @@ export default function SpriteGeneratorPage() {
     setSpriteUrl("");
     setSpriteSize(0);
 
-    // Générer les aperçus
+    // Generate previews
     Promise.all(
       files.map(
         (file) =>
@@ -40,7 +40,7 @@ export default function SpriteGeneratorPage() {
         setPreviews(results);
         generateSprite(results, spacing);
       })
-      .catch(() => toast.error("Erreur lors de la lecture des fichiers"));
+      .catch(() => toast.error("Error while reading files"));
   };
 
   const generateSprite = (dataUrls: string[], spacing: number) => {
@@ -54,7 +54,7 @@ export default function SpriteGeneratorPage() {
         images[idx] = img;
         loaded++;
         if (loaded === dataUrls.length) {
-          // Toutes les images sont chargées
+          // All images loaded
           const width =
             images.reduce((sum, img) => sum + img.width, 0) +
             spacing * (images.length - 1);
@@ -64,7 +64,7 @@ export default function SpriteGeneratorPage() {
           canvas.height = height;
           const ctx = canvas.getContext("2d");
           if (!ctx) {
-            toast.error("Erreur lors de la génération du sprite");
+            toast.error("Error while generating sprite");
             return;
           }
           let x = 0;
@@ -74,14 +74,14 @@ export default function SpriteGeneratorPage() {
           });
           const spriteDataUrl = canvas.toDataURL("image/png");
           setSpriteUrl(spriteDataUrl);
-          // Taille en octets
+          // Size in bytes
           const base64Length =
             spriteDataUrl.length - "data:image/png;base64,".length;
           const sizeInBytes = Math.ceil((base64Length * 3) / 4);
           setSpriteSize(sizeInBytes);
         }
       };
-      img.onerror = () => toast.error("Erreur lors du chargement d'une image");
+      img.onerror = () => toast.error("Error loading an image");
       img.src = url;
     });
   };
@@ -104,8 +104,8 @@ export default function SpriteGeneratorPage() {
 
   return (
     <ToolLayout
-      title="Générateur de sprite"
-      description="Générez un sprite horizontal à partir de plusieurs images."
+      title="Sprite Generator"
+      description="Generate a horizontal sprite from multiple images."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -125,7 +125,7 @@ export default function SpriteGeneratorPage() {
               onClick={() => fileInputRef.current?.click()}
             >
               <ImageIcon className="h-4 w-4 mr-1" />
-              Choisir des images
+              Choose images
             </Button>
           </div>
           {previews.length > 0 && (
@@ -134,7 +134,7 @@ export default function SpriteGeneratorPage() {
                 <img
                   key={i}
                   src={url}
-                  alt={`Aperçu ${i + 1}`}
+                  alt={`Preview ${i + 1}`}
                   className="h-16 rounded border"
                 />
               ))}
@@ -143,7 +143,7 @@ export default function SpriteGeneratorPage() {
           {previews.length > 0 && (
             <div className="mb-4">
               <Label className="text-xs mb-1 block">
-                Espacement entre les images : {spacing}px
+                Spacing between images: {spacing}px
               </Label>
               <input
                 type="range"
@@ -161,13 +161,13 @@ export default function SpriteGeneratorPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <Label className="text-sm">Sprite généré</Label>
+                <Label className="text-sm">Generated sprite</Label>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={downloadSprite}
                   disabled={!spriteUrl}
-                  title="Télécharger"
+                  title="Download"
                 >
                   <Download className="h-4 w-4" />
                 </Button>
@@ -176,16 +176,16 @@ export default function SpriteGeneratorPage() {
                 <>
                   <img
                     src={spriteUrl}
-                    alt="Sprite généré"
+                    alt="Generated sprite"
                     className="max-h-48 rounded border mb-2"
                   />
                   <div className="text-xs text-muted-foreground mb-2">
-                    Taille : {(spriteSize / 1024).toFixed(2)} Ko
+                    Size: {(spriteSize / 1024).toFixed(2)} KB
                   </div>
                 </>
               ) : (
                 <div className="text-xs text-muted-foreground">
-                  Le sprite apparaîtra ici...
+                  The sprite will appear here...
                 </div>
               )}
             </CardContent>

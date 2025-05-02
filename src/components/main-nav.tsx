@@ -166,9 +166,9 @@ function NavbarSearchBar() {
         <input
           ref={inputRef}
           type="text"
-          placeholder="Rechercher..."
+          placeholder="Search..."
           className="flex-1 bg-transparent border-none focus:outline-none px-1 py-1 text-sm rounded-full"
-          aria-label="Rechercher"
+          aria-label="Search"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

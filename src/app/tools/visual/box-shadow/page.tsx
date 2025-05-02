@@ -26,23 +26,23 @@ export default function BoxShadowGeneratorPage() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success(`${label} copié dans le presse-papier`);
+        toast.success(`${label} copied to clipboard`);
       })
       .catch(() => {
-        toast.error("Erreur lors de la copie");
+        toast.error("Copy error");
       });
   };
 
   return (
     <ToolLayout
-      title="Générateur de box-shadow"
-      description="Générez facilement la propriété CSS box-shadow. Ajustez les paramètres et copiez le CSS."
+      title="Box-shadow Generator"
+      description="Easily generate the CSS box-shadow property. Adjust parameters and copy the CSS."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Décalage X (px)</Label>
+              <Label className="mb-1 w-32">Offset X (px)</Label>
               <Input
                 type="number"
                 value={offsetX}
@@ -51,7 +51,7 @@ export default function BoxShadowGeneratorPage() {
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Décalage Y (px)</Label>
+              <Label className="mb-1 w-32">Offset Y (px)</Label>
               <Input
                 type="number"
                 value={offsetY}
@@ -60,7 +60,7 @@ export default function BoxShadowGeneratorPage() {
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Flou (px)</Label>
+              <Label className="mb-1 w-32">Blur (px)</Label>
               <Input
                 type="number"
                 min={0}
@@ -70,7 +70,7 @@ export default function BoxShadowGeneratorPage() {
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Propagation (px)</Label>
+              <Label className="mb-1 w-32">Spread (px)</Label>
               <Input
                 type="number"
                 value={spread}
@@ -79,7 +79,7 @@ export default function BoxShadowGeneratorPage() {
               />
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Label className="mb-1 w-32">Couleur</Label>
+              <Label className="mb-1 w-32">Color</Label>
               <HexColorPicker
                 color={color}
                 onChange={setColor}
@@ -104,7 +104,7 @@ export default function BoxShadowGeneratorPage() {
             </div>
           </div>
           <div>
-            <Label className="text-sm mb-2 block">CSS du box-shadow</Label>
+            <Label className="text-sm mb-2 block">Box-shadow CSS</Label>
             <div className="flex items-center gap-2">
               <Input
                 value={`box-shadow: ${boxShadowCss};`}
@@ -126,7 +126,7 @@ export default function BoxShadowGeneratorPage() {
         <div className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <Label className="text-sm mb-2 block">Aperçu du box-shadow</Label>
+              <Label className="text-sm mb-2 block">Box-shadow preview</Label>
               <div
                 className="w-full h-32 rounded shadow flex items-center justify-center"
                 style={{

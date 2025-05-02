@@ -20,10 +20,10 @@ export default function GradientGeneratorPage() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success(`${label} copié dans le presse-papier`);
+        toast.success(`${label} copied to clipboard`);
       })
       .catch(() => {
-        toast.error("Erreur lors de la copie");
+        toast.error("Copy error");
       });
   };
 
@@ -42,8 +42,8 @@ export default function GradientGeneratorPage() {
 
   return (
     <ToolLayout
-      title="Générateur de dégradé"
-      description="Générez un dégradé linéaire entre autant de couleurs que vous souhaitez. Copiez le CSS du gradient."
+      title="Gradient Generator"
+      description="Generate a linear gradient between as many colors as you want. Copy the CSS gradient."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -53,7 +53,7 @@ export default function GradientGeneratorPage() {
                 key={idx}
                 className="flex flex-col md:flex-row items-center gap-4"
               >
-                <Label className="mb-1">{`Couleur ${idx + 1}`}</Label>
+                <Label className="mb-1">{`Color ${idx + 1}`}</Label>
                 <HexColorPicker
                   color={color}
                   onChange={(val) => handleColorChange(idx, val)}
@@ -69,7 +69,7 @@ export default function GradientGeneratorPage() {
                     variant="ghost"
                     size="icon"
                     onClick={() => removeColor(idx)}
-                    title="Supprimer cette couleur"
+                    title="Remove this color"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -81,13 +81,13 @@ export default function GradientGeneratorPage() {
               size="sm"
               className="w-fit self-center"
               onClick={addColor}
-              title="Ajouter une couleur"
+              title="Add a color"
             >
-              <Plus className="h-4 w-4 mr-1" /> Ajouter une couleur
+              <Plus className="h-4 w-4 mr-1" /> Add a color
             </Button>
           </div>
           <div className="flex flex-col gap-2 mt-4">
-            <Label>Angle du dégradé (degrés)</Label>
+            <Label>Gradient angle (degrees)</Label>
             <Input
               type="number"
               min={0}
@@ -98,7 +98,7 @@ export default function GradientGeneratorPage() {
             />
           </div>
           <div>
-            <Label className="text-sm mb-2 block">CSS du dégradé</Label>
+            <Label className="text-sm mb-2 block">Gradient CSS</Label>
             <div className="flex items-center gap-2">
               <Input
                 value={`background: ${gradientCss};`}
@@ -120,7 +120,7 @@ export default function GradientGeneratorPage() {
         <div className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <Label className="text-sm mb-2 block">Aperçu du dégradé</Label>
+              <Label className="text-sm mb-2 block">Gradient preview</Label>
               <div
                 className="w-full h-32 rounded shadow"
                 style={{

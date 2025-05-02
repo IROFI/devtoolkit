@@ -26,7 +26,7 @@ export default function ImageToBase64Page() {
       setPreview(reader.result as string);
     };
     reader.onerror = () => {
-      toast.error("Erreur lors de la lecture du fichier");
+      toast.error("Error while reading the file");
     };
     reader.readAsDataURL(file);
   };
@@ -35,17 +35,17 @@ export default function ImageToBase64Page() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success(`${label} copié dans le presse-papier`);
+        toast.success(`${label} copied to clipboard`);
       })
       .catch(() => {
-        toast.error("Erreur lors de la copie");
+        toast.error("Copy error");
       });
   };
 
   return (
     <ToolLayout
-      title="Image vers Base64"
-      description="Convertissez une image en chaîne Base64 facilement."
+      title="Image to Base64"
+      description="Easily convert an image to a Base64 string."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -64,15 +64,15 @@ export default function ImageToBase64Page() {
               onClick={() => fileInputRef.current?.click()}
             >
               <ImageIcon className="h-4 w-4 mr-1" />
-              Choisir une image
+              Choose an image
             </Button>
           </div>
           {preview && (
             <div className="mb-4">
-              <Label className="text-xs mb-1 block">Aperçu</Label>
+              <Label className="text-xs mb-1 block">Preview</Label>
               <img
                 src={preview}
-                alt="Aperçu"
+                alt="Preview"
                 className="max-h-48 rounded border"
               />
             </div>
@@ -96,7 +96,7 @@ export default function ImageToBase64Page() {
                 className="w-full min-h-[200px] font-mono text-xs border rounded p-2"
                 value={base64}
                 readOnly
-                placeholder="Le code Base64 apparaîtra ici..."
+                placeholder="The Base64 code will appear here..."
               />
             </CardContent>
           </Card>
