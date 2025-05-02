@@ -70,3 +70,8 @@ Easily switch between light and dark modes for better usability.
 ## 🔍 Search Functionality
 
 Quickly find the tool you need with the built-in search bar.
+
+## 🤝 Contribute
+
+Want to get involved? Contributions are welcome!  
+Share your ideas, report bugs, or submit pull requests.

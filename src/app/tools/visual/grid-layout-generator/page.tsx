@@ -16,7 +16,6 @@ export default function GridLayoutGeneratorPage() {
   const [columnTemplate, setColumnTemplate] = useState("1fr 1fr 1fr");
   const [rowTemplate, setRowTemplate] = useState("auto auto");
 
-  // Generates the CSS grid
   const gridCss = `
 display: grid;
 grid-template-columns: ${columnTemplate};
@@ -34,7 +33,6 @@ gap: ${gap}px;`.trim();
       });
   };
 
-  // Automatically update templates if columns/rows count changes
   const handleColumnsChange = (value: number) => {
     setColumns(value);
     setColumnTemplate(Array(value).fill("1fr").join(" "));

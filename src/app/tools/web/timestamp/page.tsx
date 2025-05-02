@@ -1,23 +1,20 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect, useCallback } from "react";
 import { ToolLayout } from "@/components/tool-layout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy, RefreshCw } from "lucide-react";
-import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ClipboardCopy, RefreshCw } from "lucide-react";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
-// Helper function to format date
 const formatDate = (date: Date): string => {
   return date.toISOString();
 };
 
-// Helper to get timezone name
 const getTimezoneName = (): string => {
   try {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -29,7 +26,6 @@ const getTimezoneName = (): string => {
 export default function TimestampConverterPage() {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
-  // Update current time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -50,15 +46,25 @@ export default function TimestampConverterPage() {
               <h3 className="text-lg font-medium">Current Time</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label className="text-sm text-muted-foreground">Local Time</Label>
-                  <p className="font-mono text-sm">{currentTime.toLocaleString()}</p>
+                  <Label className="text-sm text-muted-foreground">
+                    Local Time
+                  </Label>
+                  <p className="font-mono text-sm">
+                    {currentTime.toLocaleString()}
+                  </p>
                 </div>
                 <div>
-                  <Label className="text-sm text-muted-foreground">Unix Timestamp</Label>
-                  <p className="font-mono text-sm">{Math.floor(currentTime.getTime() / 1000)}</p>
+                  <Label className="text-sm text-muted-foreground">
+                    Unix Timestamp
+                  </Label>
+                  <p className="font-mono text-sm">
+                    {Math.floor(currentTime.getTime() / 1000)}
+                  </p>
                 </div>
                 <div>
-                  <Label className="text-sm text-muted-foreground">Timezone</Label>
+                  <Label className="text-sm text-muted-foreground">
+                    Timezone
+                  </Label>
                   <p className="font-mono text-sm">{getTimezoneName()}</p>
                 </div>
               </div>
@@ -102,16 +108,17 @@ function UnixToDate() {
         throw new Error("Not a valid number");
       }
 
-      // Determine if we should treat this as seconds or milliseconds
       let finalTimestamp = timestamp;
       if (!inMilliseconds) {
-        finalTimestamp = timestamp * 1000; // Convert to milliseconds
+        finalTimestamp = timestamp * 1000;
       }
 
       const convertedDate = new Date(finalTimestamp);
 
-      // Basic validation - ensure date is reasonable
-      if (convertedDate.getFullYear() < 1970 || convertedDate.getFullYear() > 2100) {
+      if (
+        convertedDate.getFullYear() < 1970 ||
+        convertedDate.getFullYear() > 2100
+      ) {
         throw new Error("Date out of reasonable range (1970-2100)");
       }
 
@@ -124,13 +131,11 @@ function UnixToDate() {
     }
   }, [unixTime, inMilliseconds]);
 
-  // Convert when input changes
   useEffect(() => {
     convert();
   }, [convert]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Only allow numbers in the input
     const value = e.target.value.replace(/[^0-9]/g, "");
     setUnixTime(value);
   };
@@ -147,7 +152,8 @@ function UnixToDate() {
   const copyToClipboard = (text: string) => {
     if (!text) return;
 
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast.success("Copied to clipboard");
       })
@@ -190,7 +196,9 @@ function UnixToDate() {
               onChange={() => setInMilliseconds(false)}
               className="h-4 w-4"
             />
-            <Label htmlFor="seconds" className="text-sm">Seconds</Label>
+            <Label htmlFor="seconds" className="text-sm">
+              Seconds
+            </Label>
 
             <input
               id="milliseconds"
@@ -199,7 +207,9 @@ function UnixToDate() {
               onChange={() => setInMilliseconds(true)}
               className="h-4 w-4 ml-3"
             />
-            <Label htmlFor="milliseconds" className="text-sm">Milliseconds</Label>
+            <Label htmlFor="milliseconds" className="text-sm">
+              Milliseconds
+            </Label>
           </div>
         </div>
       </div>
@@ -295,9 +305,12 @@ function UnixToDate() {
 
 function DateToUnix() {
   const [dateTimeInput, setDateTimeInput] = useState("");
-  const [unixTimestamp, setUnixTimestamp] = useState<{seconds: string; milliseconds: string}>({
+  const [unixTimestamp, setUnixTimestamp] = useState<{
+    seconds: string;
+    milliseconds: string;
+  }>({
     seconds: "",
-    milliseconds: ""
+    milliseconds: "",
   });
   const [error, setError] = useState("");
 
@@ -316,7 +329,7 @@ function DateToUnix() {
 
       setUnixTimestamp({
         seconds: Math.floor(date.getTime() / 1000).toString(),
-        milliseconds: date.getTime().toString()
+        milliseconds: date.getTime().toString(),
       });
       setError("");
     } catch (err) {
@@ -326,7 +339,6 @@ function DateToUnix() {
     }
   }, [dateTimeInput]);
 
-  // Convert when input changes
   useEffect(() => {
     convert();
   }, [convert]);
@@ -338,7 +350,8 @@ function DateToUnix() {
   const copyToClipboard = (text: string) => {
     if (!text) return;
 
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast.success("Copied to clipboard");
       })
@@ -423,7 +436,6 @@ function DateToUnix() {
   );
 }
 
-// Helper function to get relative time string
 function getRelativeTimeString(date: Date): string {
   const now = new Date();
   const diffMs = date.getTime() - now.getTime();
@@ -442,15 +454,21 @@ function getRelativeTimeString(date: Date): string {
   const suffix = isFuture ? "" : " ago";
 
   if (absDiffSecs < 60) {
-    return `${prefix}${absDiffSecs} second${absDiffSecs !== 1 ? "s" : ""}${suffix}`;
+    return `${prefix}${absDiffSecs} second${
+      absDiffSecs !== 1 ? "s" : ""
+    }${suffix}`;
   }
 
   if (absDiffMins < 60) {
-    return `${prefix}${absDiffMins} minute${absDiffMins !== 1 ? "s" : ""}${suffix}`;
+    return `${prefix}${absDiffMins} minute${
+      absDiffMins !== 1 ? "s" : ""
+    }${suffix}`;
   }
 
   if (absDiffHours < 24) {
-    return `${prefix}${absDiffHours} hour${absDiffHours !== 1 ? "s" : ""}${suffix}`;
+    return `${prefix}${absDiffHours} hour${
+      absDiffHours !== 1 ? "s" : ""
+    }${suffix}`;
   }
 
   return `${prefix}${absDiffDays} day${absDiffDays !== 1 ? "s" : ""}${suffix}`;

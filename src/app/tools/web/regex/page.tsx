@@ -9,7 +9,6 @@ import { ClipboardCopy, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-// Predefined examples
 const EXAMPLES = [
   {
     regex: "\\b\\w+@\\w+\\.\\w+\\b",
@@ -38,7 +37,6 @@ export default function RegexTesterPage() {
   const [matches, setMatches] = useState<RegExpMatchArray | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Updates result on every change
   useEffect(() => {
     if (!regex) {
       setMatches(null);
@@ -56,7 +54,6 @@ export default function RegexTesterPage() {
     }
   }, [regex, flags, text]);
 
-  // Generate a random example
   const generateExample = () => {
     const ex = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
     setRegex(ex.regex);
@@ -65,7 +62,6 @@ export default function RegexTesterPage() {
     toast.info(`Example: ${ex.description}`);
   };
 
-  // Copy to clipboard
   const copyToClipboard = (value: string) => {
     navigator.clipboard
       .writeText(value)

@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import CryptoJS from "crypto-js";
 import { ToolLayout } from "@/components/tool-layout";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import CryptoJS from "crypto-js";
 import { ClipboardCopy } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const algorithms = [
@@ -68,7 +68,6 @@ export default function TextHasherPage() {
     }
   }, [text, algorithm]);
 
-  // Generate hash whenever text or algorithm changes
   useEffect(() => {
     generateHash();
   }, [generateHash]);
@@ -76,7 +75,8 @@ export default function TextHasherPage() {
   const copyToClipboard = () => {
     if (!hash) return;
 
-    navigator.clipboard.writeText(hash)
+    navigator.clipboard
+      .writeText(hash)
       .then(() => {
         toast.success("Hash copied to clipboard");
       })

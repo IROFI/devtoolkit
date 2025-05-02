@@ -49,11 +49,9 @@ export default function ImageCompressorPage() {
         return;
       }
       ctx.drawImage(img, 0, 0);
-      // JPEG pour la compression universelle
       const compressed = canvas.toDataURL("image/jpeg", quality);
       setCompressedUrl(compressed);
 
-      // Calculer la taille en octets
       const base64Length = compressed.length - "data:image/jpeg;base64,".length;
       const sizeInBytes = Math.ceil((base64Length * 3) / 4);
       setCompressedSize(sizeInBytes);

@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
-// Simple diff ligne à ligne (retourne un tableau d'objets {type: 'added'|'removed'|'unchanged', value: string})
 function diffLines(a: string, b: string) {
   const aLines = a.split("\n");
   const bLines = b.split("\n");

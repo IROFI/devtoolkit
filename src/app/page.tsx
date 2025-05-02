@@ -13,7 +13,6 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
-// Nouvelle structure toolCategories avec items détaillés
 const toolCategories = [
   {
     title: "Security & Encoding",
@@ -180,7 +179,6 @@ const toolCategories = [
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // On aplatit tous les items pour la recherche
   const allTools = toolCategories.flatMap((category) =>
     category.items.map((item) => ({
       ...item,
@@ -188,7 +186,6 @@ export default function Home() {
     }))
   );
 
-  // Filtrage sur le nom, la catégorie ou la description
   const filteredTools = allTools.filter(
     (tool) =>
       tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

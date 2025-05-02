@@ -26,12 +26,10 @@ function countWords(text: string) {
 }
 
 function countSentences(text: string) {
-  // Compte les phrases basées sur . ! ? suivis d'un espace ou fin de chaîne
   return (text.match(/[\w\)][.?!](\s|$)/g) || []).length;
 }
 
 function countParagraphs(text: string) {
-  // A paragraph is separated by two or more line breaks
   return text
     .trim()
     .split(/\n{2,}/)

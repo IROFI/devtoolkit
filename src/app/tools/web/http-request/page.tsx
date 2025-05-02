@@ -9,7 +9,6 @@ import { ClipboardCopy, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// Exemples prédéfinis de requêtes HTTP
 const EXAMPLES = [
   {
     label: "GET JSONPlaceholder",
@@ -53,7 +52,6 @@ export default function HttpRequestPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Applique un exemple prédéfini
   const applyExample = (ex: (typeof EXAMPLES)[0]) => {
     setMethod(ex.method);
     setUrl(ex.url);
@@ -65,13 +63,11 @@ export default function HttpRequestPage() {
     toast.info(`Exemple : ${ex.description}`);
   };
 
-  // Génère un exemple aléatoire
   const generateRandomExample = () => {
     const ex = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
     applyExample(ex);
   };
 
-  // Parse les headers depuis une string
   function parseHeaders(headerString: string): Record<string, string> {
     const headers: Record<string, string> = {};
     headerString
@@ -89,7 +85,6 @@ export default function HttpRequestPage() {
     return headers;
   }
 
-  // Envoie la requête HTTP
   const sendRequest = async () => {
     setLoading(true);
     setResponse(null);
@@ -106,7 +101,6 @@ export default function HttpRequestPage() {
       const res = await fetch(url, fetchOptions);
       setStatus(res.status);
       let text = await res.text();
-      // Essaie de formater le JSON
       try {
         text = JSON.stringify(JSON.parse(text), null, 2);
       } catch {}
@@ -118,7 +112,6 @@ export default function HttpRequestPage() {
     }
   };
 
-  // Copier dans le presse-papier
   const copyToClipboard = (value: string) => {
     navigator.clipboard
       .writeText(value)

@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 
-// Function to convert hex to RGB
 const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -22,13 +21,11 @@ const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
     : null;
 };
 
-// Function to convert RGB to HSL
 const rgbToHsl = (
   red: number,
   green: number,
   blue: number
 ): { h: number; s: number; l: number } => {
-  // Normalize RGB values to 0-1 range
   const r = red / 255;
   const g = green / 255;
   const b = blue / 255;
@@ -65,7 +62,6 @@ const rgbToHsl = (
   };
 };
 
-// Fonction pour convertir HSL en HEX
 const hslToHex = (h: number, s: number, l: number): string => {
   s /= 100;
   l /= 100;
@@ -112,12 +108,10 @@ const hslToHex = (h: number, s: number, l: number): string => {
   );
 };
 
-// Generate a palette of 5 colors by varying the lightness
 const generatePalette = (baseHex: string) => {
   const rgb = hexToRgb(baseHex);
   if (!rgb) return [];
   const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-  // Generate 5 colors by varying the lightness
   const steps = [-30, -15, 0, 15, 30];
   return steps.map((delta, idx) => {
     const l = Math.max(0, Math.min(100, hsl.l + delta));

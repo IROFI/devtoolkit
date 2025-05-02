@@ -8,7 +8,6 @@ import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// Example CSS to minify
 const EXAMPLE_CSS = `
 /* Example CSS */
 body {
@@ -29,11 +28,11 @@ a {
 
 function minifyCss(css: string): string {
   return css
-    .replace(/\/\*[\s\S]*?\*\//g, "") // Remove comments
-    .replace(/\s{2,}/g, " ") // Reduce multiple spaces
-    .replace(/\s*([{}:;,])\s*/g, "$1") // Remove spaces around symbols
-    .replace(/;}/g, "}") // Remove ; before }
-    .replace(/^\s+|\s+$/g, ""); // Trim
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s*([{}:;,])\s*/g, "$1")
+    .replace(/;}/g, "}")
+    .replace(/^\s+|\s+$/g, "");
 }
 
 export default function CssMinifierPage() {

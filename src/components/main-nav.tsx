@@ -106,7 +106,6 @@ function NavbarSearchBar() {
             tool.category.toLowerCase().includes(query.toLowerCase())
         );
 
-  // Fermer la liste si on clique ailleurs
   React.useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (
@@ -123,7 +122,6 @@ function NavbarSearchBar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [showResults]);
 
-  // Navigation clavier
   function handleKeyDown(e: React.KeyboardEvent) {
     if (!showResults || filtered.length === 0) return;
     if (e.key === "ArrowDown") {

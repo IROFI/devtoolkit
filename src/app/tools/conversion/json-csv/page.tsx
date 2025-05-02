@@ -47,7 +47,6 @@ function JsonToCsv() {
 
     try {
       const jsonObj = JSON.parse(json);
-      // PapaParse expects an array of objects
       const data = Array.isArray(jsonObj) ? jsonObj : [jsonObj];
       const csv = Papa.unparse(data, { quotes: false });
       setCsvOutput(csv);

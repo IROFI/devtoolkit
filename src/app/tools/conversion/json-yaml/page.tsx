@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import yaml from "js-yaml";
 import { ToolLayout } from "@/components/tool-layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy, RefreshCw, ArrowLeftRight } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import yaml from "js-yaml";
+import { ClipboardCopy } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function JsonYamlConverterPage() {
@@ -38,8 +38,6 @@ function JsonToYaml() {
   const [error, setError] = useState("");
   const [isPretty, setIsPretty] = useState(true);
 
-  // Ignore external library functions for dependency tracking
-  // biome-ignore lint/correctness/useExhaustiveDependencies: yaml library is stable
   const convertJsonToYaml = useCallback(() => {
     setError("");
     setYamlOutput("");
@@ -49,10 +47,8 @@ function JsonToYaml() {
     }
 
     try {
-      // Parse JSON
       const jsonObj = JSON.parse(json);
 
-      // Convert to YAML
       const yamlResult = yaml.dump(jsonObj, {
         indent: 2,
         lineWidth: -1,
@@ -76,7 +72,8 @@ function JsonToYaml() {
   const copyToClipboard = () => {
     if (!yamlOutput) return;
 
-    navigator.clipboard.writeText(yamlOutput)
+    navigator.clipboard
+      .writeText(yamlOutput)
       .then(() => {
         toast.success("YAML copied to clipboard");
       })
@@ -86,23 +83,27 @@ function JsonToYaml() {
   };
 
   const loadSampleJson = () => {
-    const sampleJson = JSON.stringify({
-      name: "DevToolkit",
-      version: "1.0.0",
-      description: "A collection of useful developer tools",
-      features: [
-        "JSON ↔ YAML Converter",
-        "Base64 Encoder/Decoder",
-        "URL Encoder/Decoder",
-        "Hash Generator"
-      ],
-      settings: {
-        theme: "dark",
-        language: "en",
-        notification: true
+    const sampleJson = JSON.stringify(
+      {
+        name: "DevToolkit",
+        version: "1.0.0",
+        description: "A collection of useful developer tools",
+        features: [
+          "JSON ↔ YAML Converter",
+          "Base64 Encoder/Decoder",
+          "URL Encoder/Decoder",
+          "Hash Generator",
+        ],
+        settings: {
+          theme: "dark",
+          language: "en",
+          notification: true,
+        },
+        isOpenSource: true,
       },
-      isOpenSource: true
-    }, null, 2);
+      null,
+      2
+    );
 
     setJson(sampleJson);
   };
@@ -173,8 +174,6 @@ function YamlToJson() {
   const [error, setError] = useState("");
   const [isPretty, setIsPretty] = useState(true);
 
-  // Ignore external library functions for dependency tracking
-  // biome-ignore lint/correctness/useExhaustiveDependencies: yaml library is stable
   const convertYamlToJson = useCallback(() => {
     setError("");
     setJsonOutput("");
@@ -184,10 +183,8 @@ function YamlToJson() {
     }
 
     try {
-      // Parse YAML
       const yamlObj = yaml.load(yamlInput);
 
-      // Convert to JSON
       const jsonResult = JSON.stringify(yamlObj, null, isPretty ? 2 : 0);
 
       setJsonOutput(jsonResult);
@@ -206,7 +203,8 @@ function YamlToJson() {
   const copyToClipboard = () => {
     if (!jsonOutput) return;
 
-    navigator.clipboard.writeText(jsonOutput)
+    navigator.clipboard
+      .writeText(jsonOutput)
       .then(() => {
         toast.success("JSON copied to clipboard");
       })

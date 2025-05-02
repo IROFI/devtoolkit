@@ -1,15 +1,15 @@
 "use client";
 
-import type React from "react";
-import { useState, useCallback } from "react";
 import { ToolLayout } from "@/components/tool-layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy } from "lucide-react";
-import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { ClipboardCopy } from "lucide-react";
+import type React from "react";
+import { useCallback, useState } from "react";
+import { toast } from "sonner";
 
 export default function URLConverterPage() {
   return (
@@ -49,10 +49,8 @@ function URLEncoder() {
 
     try {
       if (encodeAll) {
-        // Use encodeURIComponent to encode all characters
         setOutput(encodeURIComponent(input));
       } else {
-        // Use encodeURI to preserve URL structure like : / ? &
         setOutput(encodeURI(input));
       }
     } catch (err) {
@@ -61,7 +59,6 @@ function URLEncoder() {
     }
   }, [input, encodeAll]);
 
-  // Auto-update the output if enabled
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
@@ -88,7 +85,8 @@ function URLEncoder() {
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Encoded URL copied to clipboard");
       })
@@ -179,11 +177,14 @@ function URLEncoder() {
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p className="mb-2">
-          <strong>URL Encoding</strong> replaces unsafe ASCII characters with % followed by two hexadecimal digits.
+          <strong>URL Encoding</strong> replaces unsafe ASCII characters with %
+          followed by two hexadecimal digits.
         </p>
         <p className="text-xs">
-          • <strong>encodeURI</strong>: Preserves URL structure characters (/, :, &, ?, etc.)<br />
-          • <strong>encodeURIComponent</strong>: Encodes all special characters, use for URL parameters
+          • <strong>encodeURI</strong>: Preserves URL structure characters (/,
+          :, &, ?, etc.)
+          <br />• <strong>encodeURIComponent</strong>: Encodes all special
+          characters, use for URL parameters
         </p>
       </div>
     </div>
@@ -207,7 +208,6 @@ function URLDecoder() {
       setOutput(decodeURIComponent(input));
     } catch (err) {
       try {
-        // Fall back to decodeURI if decodeURIComponent fails
         setOutput(decodeURI(input));
       } catch (err2) {
         console.error("URL decoding error:", err2);
@@ -216,7 +216,6 @@ function URLDecoder() {
     }
   }, [input]);
 
-  // Auto-update the output if enabled
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
@@ -231,7 +230,6 @@ function URLDecoder() {
         try {
           setOutput(decodeURIComponent(value));
         } catch (err) {
-          // Fall back to decodeURI if decodeURIComponent fails
           setOutput(decodeURI(value));
         }
       } catch (err) {
@@ -244,7 +242,8 @@ function URLDecoder() {
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Decoded text copied to clipboard");
       })
@@ -316,7 +315,9 @@ function URLDecoder() {
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p>
-          <strong>URL Decoding</strong> converts URL encoded strings back to their original format, replacing %XX sequences with their corresponding characters.
+          <strong>URL Decoding</strong> converts URL encoded strings back to
+          their original format, replacing %XX sequences with their
+          corresponding characters.
         </p>
       </div>
     </div>

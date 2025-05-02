@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { HexColorPicker, HexColorInput } from "react-colorful";
 import { ToolLayout } from "@/components/tool-layout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy } from "lucide-react";
-import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ClipboardCopy } from "lucide-react";
+import { useEffect, useState } from "react";
+import { HexColorPicker } from "react-colorful";
+import { toast } from "sonner";
 
-// Function to convert hex to RGB
 const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -23,9 +22,11 @@ const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
     : null;
 };
 
-// Function to convert RGB to HSL
-const rgbToHsl = (red: number, green: number, blue: number): { h: number; s: number; l: number } => {
-  // Normalize RGB values to 0-1 range
+const rgbToHsl = (
+  red: number,
+  green: number,
+  blue: number
+): { h: number; s: number; l: number } => {
   const r = red / 255;
   const g = green / 255;
   const b = blue / 255;
@@ -67,7 +68,6 @@ export default function ColorPickerPage() {
   const [rgbValues, setRgbValues] = useState({ r: 59, g: 130, b: 246 });
   const [hslValues, setHslValues] = useState({ h: 217, s: 91, l: 60 });
 
-  // Update RGB and HSL when color changes
   useEffect(() => {
     const rgb = hexToRgb(color);
     if (rgb) {
@@ -76,9 +76,9 @@ export default function ColorPickerPage() {
     }
   }, [color]);
 
-  // Function to copy to clipboard
   const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast.success(`${label} copied to clipboard`);
       })
@@ -96,12 +96,20 @@ export default function ColorPickerPage() {
     {
       label: "RGB",
       value: `rgb(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b})`,
-      copy: () => copyToClipboard(`rgb(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b})`, "RGB color"),
+      copy: () =>
+        copyToClipboard(
+          `rgb(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b})`,
+          "RGB color"
+        ),
     },
     {
       label: "HSL",
       value: `hsl(${hslValues.h}deg, ${hslValues.s}%, ${hslValues.l}%)`,
-      copy: () => copyToClipboard(`hsl(${hslValues.h}deg, ${hslValues.s}%, ${hslValues.l}%)`, "HSL color"),
+      copy: () =>
+        copyToClipboard(
+          `hsl(${hslValues.h}deg, ${hslValues.s}%, ${hslValues.l}%)`,
+          "HSL color"
+        ),
     },
   ];
 
@@ -138,7 +146,9 @@ export default function ColorPickerPage() {
                   style={{ backgroundColor: color }}
                 />
                 <div className="flex-1">
-                  <Label className="text-xs text-muted-foreground">{format.label}</Label>
+                  <Label className="text-xs text-muted-foreground">
+                    {format.label}
+                  </Label>
                   <div className="flex">
                     <Input
                       value={format.value}
@@ -188,7 +198,10 @@ export default function ColorPickerPage() {
                     />
                     <div
                       className="h-12 flex-1 rounded-md shadow-md flex items-center justify-center"
-                      style={{ backgroundColor: color, color: hslValues.l > 50 ? "#000" : "#fff" }}
+                      style={{
+                        backgroundColor: color,
+                        color: hslValues.l > 50 ? "#000" : "#fff",
+                      }}
                     >
                       <span className="font-medium">Sample Text</span>
                     </div>
@@ -200,21 +213,27 @@ export default function ColorPickerPage() {
                 <div className="space-y-1">
                   <div
                     className="w-full h-20 rounded-md"
-                    style={{ backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.25)` }}
+                    style={{
+                      backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.25)`,
+                    }}
                   />
                   <Label className="text-xs text-center block">25%</Label>
                 </div>
                 <div className="space-y-1">
                   <div
                     className="w-full h-20 rounded-md"
-                    style={{ backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.5)` }}
+                    style={{
+                      backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.5)`,
+                    }}
                   />
                   <Label className="text-xs text-center block">50%</Label>
                 </div>
                 <div className="space-y-1">
                   <div
                     className="w-full h-20 rounded-md"
-                    style={{ backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.75)` }}
+                    style={{
+                      backgroundColor: `rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.75)`,
+                    }}
                   />
                   <Label className="text-xs text-center block">75%</Label>
                 </div>
@@ -250,7 +269,9 @@ export default function ColorPickerPage() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm">Using RGBA (with opacity)</Label>
+                      <Label className="text-sm">
+                        Using RGBA (with opacity)
+                      </Label>
                       <div className="font-mono text-sm bg-muted p-2 rounded mt-1">
                         {`color: rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, 0.5);`}
                       </div>
@@ -286,7 +307,8 @@ export default function ColorPickerPage() {
                       </div>
                     </div>
                     <div className="mt-2 text-xs text-muted-foreground">
-                      Add these arbitrary values to your tailwind.config.js for reuse or use the closest Tailwind color.
+                      Add these arbitrary values to your tailwind.config.js for
+                      reuse or use the closest Tailwind color.
                     </div>
                   </div>
                 </CardContent>

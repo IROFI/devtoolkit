@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
 import { ToolLayout } from "@/components/tool-layout";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy } from "lucide-react";
-import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { ClipboardCopy } from "lucide-react";
+import { useCallback, useState } from "react";
+import { toast } from "sonner";
 
-// Type for JSON value
 type JsonValue =
   | string
   | number
@@ -58,15 +57,12 @@ function JsonBeautifier() {
     }
 
     try {
-      // Parse the JSON to validate it
       const jsonObject = JSON.parse(input);
 
-      // Format with the specified indentation
       let formattedJson = "";
       if (sortKeys) {
-        // Custom sorting of keys
         const sortObject = (obj: JsonValue): JsonValue => {
-          if (obj !== null && typeof obj === 'object' && !Array.isArray(obj)) {
+          if (obj !== null && typeof obj === "object" && !Array.isArray(obj)) {
             return Object.keys(obj)
               .sort()
               .reduce((result: Record<string, JsonValue>, key) => {
@@ -77,7 +73,7 @@ function JsonBeautifier() {
           }
 
           if (Array.isArray(obj)) {
-            return obj.map(item => sortObject(item));
+            return obj.map((item) => sortObject(item));
           }
 
           return obj;
@@ -86,21 +82,25 @@ function JsonBeautifier() {
         const sortedObj = sortObject(jsonObject);
         formattedJson = JSON.stringify(sortedObj, null, indentation);
       } else {
-        // Regular formatting without sorting
         formattedJson = JSON.stringify(jsonObject, null, indentation);
       }
 
       setOutput(formattedJson);
     } catch (err) {
       console.error("JSON parsing error:", err);
-      setError(err instanceof Error ? err.message : "Invalid JSON. Please check your input.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Invalid JSON. Please check your input."
+      );
     }
   }, [input, indentation, sortKeys]);
 
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Formatted JSON copied to clipboard");
       })
@@ -118,14 +118,14 @@ function JsonBeautifier() {
         "JSON Formatter",
         "Base64 Encoder/Decoder",
         "URL Encoder/Decoder",
-        "Hash Generator"
+        "Hash Generator",
       ],
       settings: {
         theme: "dark",
         language: "en",
-        notification: true
+        notification: true,
       },
-      isOpenSource: true
+      isOpenSource: true,
     });
 
     setInput(sampleJson);
@@ -136,7 +136,9 @@ function JsonBeautifier() {
       <div className="grid gap-4">
         <div className="flex gap-4 flex-col sm:flex-row">
           <div className="flex items-center space-x-2">
-            <Label htmlFor="indentation">Indentation: {indentation} spaces</Label>
+            <Label htmlFor="indentation">
+              Indentation: {indentation} spaces
+            </Label>
             <Slider
               id="indentation"
               value={[indentation]}
@@ -249,23 +251,26 @@ function JsonMinifier() {
     }
 
     try {
-      // Parse the JSON to validate it
       const jsonObject = JSON.parse(input);
 
-      // Minify by using null for replacer and 0 for spaces
       const minifiedJson = JSON.stringify(jsonObject);
 
       setOutput(minifiedJson);
     } catch (err) {
       console.error("JSON parsing error:", err);
-      setError(err instanceof Error ? err.message : "Invalid JSON. Please check your input.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Invalid JSON. Please check your input."
+      );
     }
   }, [input]);
 
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Minified JSON copied to clipboard");
       })
@@ -275,23 +280,27 @@ function JsonMinifier() {
   };
 
   const loadSampleJson = () => {
-    const sampleJson = JSON.stringify({
-      name: "DevToolkit",
-      version: "1.0.0",
-      description: "A collection of useful developer tools",
-      features: [
-        "JSON Formatter",
-        "Base64 Encoder/Decoder",
-        "URL Encoder/Decoder",
-        "Hash Generator"
-      ],
-      settings: {
-        theme: "dark",
-        language: "en",
-        notification: true
+    const sampleJson = JSON.stringify(
+      {
+        name: "DevToolkit",
+        version: "1.0.0",
+        description: "A collection of useful developer tools",
+        features: [
+          "JSON Formatter",
+          "Base64 Encoder/Decoder",
+          "URL Encoder/Decoder",
+          "Hash Generator",
+        ],
+        settings: {
+          theme: "dark",
+          language: "en",
+          notification: true,
+        },
+        isOpenSource: true,
       },
-      isOpenSource: true
-    }, null, 2);
+      null,
+      2
+    );
 
     setInput(sampleJson);
   };

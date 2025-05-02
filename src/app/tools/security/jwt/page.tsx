@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { jwtDecode } from "jwt-decode";
 import { ToolLayout } from "@/components/tool-layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { jwtDecode } from "jwt-decode";
 import { ClipboardCopy } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function JWTToolPage() {
@@ -50,21 +50,17 @@ function JWTDecoder() {
     }
 
     try {
-      // Split JWT into parts
       const parts = jwt.split(".");
       if (parts.length !== 3) {
         throw new Error("JWT must have 3 parts (header, payload, signature)");
       }
 
-      // Decode header
       const decodedHeader = jwtDecode(jwt, { header: true });
       setHeader(JSON.stringify(decodedHeader, null, 2));
 
-      // Decode payload
       const decodedPayload = jwtDecode(jwt);
       setPayload(JSON.stringify(decodedPayload, null, 2));
 
-      // Get signature (not decoded, just the base64 part)
       setSignature(parts[2]);
     } catch (err) {
       console.error("JWT decode error:", err);
@@ -82,7 +78,8 @@ function JWTDecoder() {
   const copyToClipboard = (text: string, label: string) => {
     if (!text) return;
 
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast.success(`${label} copied to clipboard`);
       })
@@ -189,8 +186,20 @@ function JWTDecoder() {
 }
 
 function JWTEncoder() {
-  const [header, setHeader] = useState(JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2));
-  const [payload, setPayload] = useState(JSON.stringify({ sub: "1234567890", name: "John Doe", iat: Math.floor(Date.now() / 1000) }, null, 2));
+  const [header, setHeader] = useState(
+    JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2)
+  );
+  const [payload, setPayload] = useState(
+    JSON.stringify(
+      {
+        sub: "1234567890",
+        name: "John Doe",
+        iat: Math.floor(Date.now() / 1000),
+      },
+      null,
+      2
+    )
+  );
   const [secret, setSecret] = useState("");
   const [encodedJWT, setEncodedJWT] = useState("");
   const [error, setError] = useState("");
@@ -205,32 +214,34 @@ function JWTEncoder() {
     }
 
     try {
-      // Parse JSON
       const headerObj = JSON.parse(header);
       const payloadObj = JSON.parse(payload);
 
-      // Note: In a browser environment, we can't actually sign the JWT properly without a backend
-      // This is more for educational purposes to show the structure
       const encodedHeader = btoa(JSON.stringify(headerObj));
       const encodedPayload = btoa(JSON.stringify(payloadObj));
 
-      // In a real implementation, the signature would be cryptographically generated
-      // Here we just show the structure with a placeholder for the signature
       const placeholderSignature = "SIGNATURE_WOULD_BE_GENERATED_ON_SERVER";
-      const token = `${encodedHeader}.${encodedPayload}.${btoa(placeholderSignature)}`;
+      const token = `${encodedHeader}.${encodedPayload}.${btoa(
+        placeholderSignature
+      )}`;
 
       setEncodedJWT(token);
-      toast.info("Note: JWT is not cryptographically signed in the browser. For actual JWT signing, use a server-side implementation.");
+      toast.info(
+        "Note: JWT is not cryptographically signed in the browser. For actual JWT signing, use a server-side implementation."
+      );
     } catch (err) {
       console.error("JWT encode error:", err);
-      setError(err instanceof Error ? err.message : "Invalid JSON in header or payload");
+      setError(
+        err instanceof Error ? err.message : "Invalid JSON in header or payload"
+      );
     }
   };
 
   const copyToClipboard = () => {
     if (!encodedJWT) return;
 
-    navigator.clipboard.writeText(encodedJWT)
+    navigator.clipboard
+      .writeText(encodedJWT)
       .then(() => {
         toast.success("JWT copied to clipboard");
       })
@@ -258,7 +269,9 @@ function JWTEncoder() {
           value={header}
           onChange={(e) => setHeader(e.target.value)}
           rows={5}
-          className={`font-mono text-sm resize-none ${!validateJSON(header) && header ? 'border-destructive' : ''}`}
+          className={`font-mono text-sm resize-none ${
+            !validateJSON(header) && header ? "border-destructive" : ""
+          }`}
         />
         {!validateJSON(header) && header && (
           <p className="text-destructive text-sm">Invalid JSON format</p>
@@ -273,7 +286,9 @@ function JWTEncoder() {
           value={payload}
           onChange={(e) => setPayload(e.target.value)}
           rows={8}
-          className={`font-mono text-sm resize-none ${!validateJSON(payload) && payload ? 'border-destructive' : ''}`}
+          className={`font-mono text-sm resize-none ${
+            !validateJSON(payload) && payload ? "border-destructive" : ""
+          }`}
         />
         {!validateJSON(payload) && payload && (
           <p className="text-destructive text-sm">Invalid JSON format</p>
@@ -281,7 +296,9 @@ function JWTEncoder() {
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="secret-input">Secret Key (for demonstration only)</Label>
+        <Label htmlFor="secret-input">
+          Secret Key (for demonstration only)
+        </Label>
         <Input
           id="secret-input"
           placeholder="Enter secret key..."
@@ -290,7 +307,8 @@ function JWTEncoder() {
           type="password"
         />
         <p className="text-muted-foreground text-sm">
-          Note: In browser environments, JWT signing is typically handled server-side for security.
+          Note: In browser environments, JWT signing is typically handled
+          server-side for security.
         </p>
       </div>
 
@@ -329,7 +347,8 @@ function JWTEncoder() {
             className="font-mono text-sm resize-none"
           />
           <p className="text-muted-foreground text-xs">
-            This is a mock JWT for educational purposes. For actual JWT signing with proper cryptography, use a server-side implementation.
+            This is a mock JWT for educational purposes. For actual JWT signing
+            with proper cryptography, use a server-side implementation.
           </p>
         </div>
       )}

@@ -48,7 +48,6 @@ function generateLoremIpsum(
     }
     return result.slice(0, count).join(" ");
   }
-  // mode === "words"
   const words = splitIntoWords(BASE_PARAGRAPH);
   let result: string[] = [];
   while (result.length < count) {

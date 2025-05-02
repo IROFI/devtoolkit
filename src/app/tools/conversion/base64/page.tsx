@@ -1,15 +1,15 @@
 "use client";
 
-import type React from "react";
-import { useState, useCallback } from "react";
 import { ToolLayout } from "@/components/tool-layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy } from "lucide-react";
-import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { ClipboardCopy } from "lucide-react";
+import type React from "react";
+import { useCallback, useState } from "react";
+import { toast } from "sonner";
 
 export default function Base64ConverterPage() {
   return (
@@ -56,7 +56,6 @@ function Base64Encoder() {
     }
   }, [input]);
 
-  // Auto-update the output if enabled
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
@@ -80,7 +79,8 @@ function Base64Encoder() {
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Base64 copied to clipboard");
       })
@@ -152,7 +152,9 @@ function Base64Encoder() {
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p>
-          <strong>Base64 Encoding</strong> converts text or binary data to an ASCII string format, typically used for transmitting or storing binary data in text-based formats.
+          <strong>Base64 Encoding</strong> converts text or binary data to an
+          ASCII string format, typically used for transmitting or storing binary
+          data in text-based formats.
         </p>
       </div>
     </div>
@@ -180,7 +182,6 @@ function Base64Decoder() {
     }
   }, [input]);
 
-  // Auto-update the output if enabled
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
@@ -202,7 +203,8 @@ function Base64Decoder() {
   const copyToClipboard = () => {
     if (!output) return;
 
-    navigator.clipboard.writeText(output)
+    navigator.clipboard
+      .writeText(output)
       .then(() => {
         toast.success("Text copied to clipboard");
       })
@@ -274,7 +276,9 @@ function Base64Decoder() {
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p>
-          <strong>Base64 Decoding</strong> converts Base64 encoded data back to its original format. Note that only valid Base64 strings can be decoded correctly.
+          <strong>Base64 Decoding</strong> converts Base64 encoded data back to
+          its original format. Note that only valid Base64 strings can be
+          decoded correctly.
         </p>
       </div>
     </div>

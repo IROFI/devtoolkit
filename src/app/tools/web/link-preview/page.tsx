@@ -9,7 +9,6 @@ import { Link, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// Exemple d'URL à tester
 const EXAMPLE_URL = "https://www.lemonde.fr/";
 
 type LinkPreview = {
@@ -60,7 +59,6 @@ export default function LinkPreviewPage() {
     }
   };
 
-  // Remplit avec l'exemple
   const fillExample = () => {
     setUrl(EXAMPLE_URL);
     setPreview(null);

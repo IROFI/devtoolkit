@@ -43,7 +43,6 @@ function ImageConverter() {
   const [error, setError] = useState<string>("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Handles file upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
     setOutputUrl("");
@@ -67,7 +66,6 @@ function ImageConverter() {
     }
   };
 
-  // Handles output format change
   const handleFormatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOutputFormat(e.target.value);
     if (file && autoConvert) {
@@ -75,7 +73,6 @@ function ImageConverter() {
     }
   };
 
-  // Image conversion
   const convertImage = (file: File, format: string) => {
     setLoading(true);
     setError("");
@@ -115,7 +112,6 @@ function ImageConverter() {
     img.src = URL.createObjectURL(file);
   };
 
-  // Download result
   const handleDownload = () => {
     if (!outputUrl) return;
     const a = document.createElement("a");
@@ -129,7 +125,6 @@ function ImageConverter() {
     toast.success("Image downloaded!");
   };
 
-  // Manual conversion
   const handleManualConvert = () => {
     if (file) convertImage(file, outputFormat);
   };

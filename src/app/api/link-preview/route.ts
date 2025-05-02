@@ -30,18 +30,15 @@ export async function POST(request: Request) {
     const html = await response.text();
     const $ = cheerio.load(html);
 
-    // Favicon
     let favicon =
       $('link[rel="icon"]').attr("href") ||
       $('link[rel="shortcut icon"]').attr("href") ||
       `${siteUrl.origin}/favicon.ico`;
 
-    // Absolutiser l'URL du favicon si elle est relative
     if (favicon && !favicon.startsWith("http")) {
       favicon = new URL(favicon, siteUrl.origin).href;
     }
 
-    // Récupérer les métadonnées og
     const ogTags: { [key: string]: string } = {};
     $('meta[property^="og:"]').each((_, element) => {
       const property = $(element).attr("property");
@@ -58,7 +55,6 @@ export async function POST(request: Request) {
       image = "/homepage/description.jpg";
     }
 
-    // Télécharger le favicon
     let faviconBase64 = null;
     try {
       faviconBase64 = await downloadImage(favicon);
@@ -66,7 +62,6 @@ export async function POST(request: Request) {
       console.error("Erreur lors du téléchargement du favicon:", error);
     }
 
-    // Récupérer la date de publication
     const publishDate =
       ogTags["article:published_time"] ||
       $('meta[property="article:published_time"]').attr("content") ||

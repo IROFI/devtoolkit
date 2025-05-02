@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import zxcvbn from "zxcvbn";
 import { ToolLayout } from "@/components/tool-layout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { ClipboardCopy, RefreshCw } from "lucide-react";
-import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { ClipboardCopy, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import zxcvbn from "zxcvbn";
 
 export default function PasswordGeneratorPage() {
   const [password, setPassword] = useState("");
@@ -21,10 +21,8 @@ export default function PasswordGeneratorPage() {
   const [includeSymbols, setIncludeSymbols] = useState(true);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  // Generate password on first render and when settings change
   useEffect(() => {
     generatePassword();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -40,8 +38,12 @@ export default function PasswordGeneratorPage() {
     const numberChars = "0123456789";
     const symbolChars = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
 
-    // Ensure at least one character type is selected
-    if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
+    if (
+      !includeUppercase &&
+      !includeLowercase &&
+      !includeNumbers &&
+      !includeSymbols
+    ) {
       toast.error("Please select at least one character type");
       return;
     }
@@ -55,7 +57,6 @@ export default function PasswordGeneratorPage() {
     let newPassword = "";
     let hasAllRequiredTypes = false;
 
-    // Keep generating until all requirements are met
     while (!hasAllRequiredTypes) {
       newPassword = "";
       for (let i = 0; i < length; i++) {
@@ -63,13 +64,13 @@ export default function PasswordGeneratorPage() {
         newPassword += charset[randomIndex];
       }
 
-      // Check if the password contains at least one of each required character type
       const hasUppercase = !includeUppercase || /[A-Z]/.test(newPassword);
       const hasLowercase = !includeLowercase || /[a-z]/.test(newPassword);
       const hasNumber = !includeNumbers || /[0-9]/.test(newPassword);
       const hasSymbol = !includeSymbols || /[^A-Za-z0-9]/.test(newPassword);
 
-      hasAllRequiredTypes = hasUppercase && hasLowercase && hasNumber && hasSymbol;
+      hasAllRequiredTypes =
+        hasUppercase && hasLowercase && hasNumber && hasSymbol;
     }
 
     setPassword(newPassword);
@@ -78,7 +79,8 @@ export default function PasswordGeneratorPage() {
   const copyToClipboard = () => {
     if (!password) return;
 
-    navigator.clipboard.writeText(password)
+    navigator.clipboard
+      .writeText(password)
       .then(() => {
         toast.success("Password copied to clipboard");
       })
@@ -170,7 +172,9 @@ export default function PasswordGeneratorPage() {
           </div>
           <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
             <div
-              className={`h-2 ${getStrengthColor(passwordStrength)} transition-all`}
+              className={`h-2 ${getStrengthColor(
+                passwordStrength
+              )} transition-all`}
               style={{ width: `${(passwordStrength / 4) * 100}%` }}
             />
           </div>
@@ -258,8 +262,8 @@ export default function PasswordGeneratorPage() {
         <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
           <p className="font-medium mb-1">Privacy Notice:</p>
           <p>
-            All password generation is performed locally in your browser.
-            Your passwords are never sent to a server or stored anywhere.
+            All password generation is performed locally in your browser. Your
+            passwords are never sent to a server or stored anywhere.
           </p>
         </div>
       </div>

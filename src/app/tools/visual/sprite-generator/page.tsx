@@ -24,7 +24,6 @@ export default function SpriteGeneratorPage() {
     setSpriteUrl("");
     setSpriteSize(0);
 
-    // Generate previews
     Promise.all(
       files.map(
         (file) =>
@@ -54,7 +53,6 @@ export default function SpriteGeneratorPage() {
         images[idx] = img;
         loaded++;
         if (loaded === dataUrls.length) {
-          // All images loaded
           const width =
             images.reduce((sum, img) => sum + img.width, 0) +
             spacing * (images.length - 1);
@@ -74,7 +72,6 @@ export default function SpriteGeneratorPage() {
           });
           const spriteDataUrl = canvas.toDataURL("image/png");
           setSpriteUrl(spriteDataUrl);
-          // Size in bytes
           const base64Length =
             spriteDataUrl.length - "data:image/png;base64,".length;
           const sizeInBytes = Math.ceil((base64Length * 3) / 4);

@@ -21,12 +21,10 @@ const TAILWIND_MAP: Record<Unit, (value: number) => string | null> = {
     return null;
   },
   rem: (v) => {
-    // 1rem = 16px
     const px = v * 16;
     return TAILWIND_MAP.px(px);
   },
   em: (v) => {
-    // 1em = 16px (default)
     const px = v * 16;
     return TAILWIND_MAP.px(px);
   },
@@ -46,8 +44,6 @@ const TAILWIND_MAP: Record<Unit, (value: number) => string | null> = {
 };
 
 function convertAllUnits(value: number, from: Unit) {
-  // Basic conversion: px <-> rem/em (1rem = 16px), %/vw/vh arbitrary (100% = 100vw = 100vh = 16px for example)
-  // For %/vw/vh, we assume 100% = 100vw = 100vh = 16px (for demonstration, adapt for real context)
   let px: number;
   switch (from) {
     case "px":
