@@ -59,7 +59,7 @@ const toolCategories = [
     items: [
       { name: "Color Picker", href: "/tools/visual/color-picker" },
       {
-        name: "COLOR PALET GENERATOR",
+        name: "Color Palette Generator",
         href: "/tools/visual/color-palet-generator",
       },
       {
