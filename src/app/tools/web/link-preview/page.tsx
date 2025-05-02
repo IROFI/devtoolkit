@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertTriangle, Link, RefreshCw } from "lucide-react";
+import { Link, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -16,7 +16,9 @@ type LinkPreview = {
   title: string;
   description: string;
   image: string;
+  favicon?: string;
   url: string;
+  publishDate?: string;
 };
 
 export default function LinkPreviewPage() {
@@ -36,183 +38,26 @@ export default function LinkPreviewPage() {
     setPreview(null);
 
     try {
-      // Tentative directe de récupération du HTML
-      // Note: Cela ne fonctionnera que pour les sites qui permettent les requêtes CORS
-      const response = await fetch(url, {
-        mode: "cors", // Tente une requête CORS
-        headers: {
-          Accept: "text/html",
-        },
+      const response = await fetch("/api/link-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
       });
 
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(
-          "Erreur lors de la récupération de la page - CORS probablement bloqué"
+          data.error || "Erreur lors de la récupération des métadonnées"
         );
       }
 
-      const html = await response.text();
-
-      // Extraire les métadonnées avec des regex simples
-      const title =
-        extractTag(html, "title") ||
-        extractMetaTag(html, "og:title") ||
-        extractMetaTag(html, "twitter:title") ||
-        "Titre non disponible";
-
-      const description =
-        extractMetaTag(html, "og:description") ||
-        extractMetaTag(html, "description") ||
-        extractMetaTag(html, "twitter:description") ||
-        "Description non disponible";
-
-      const image =
-        extractMetaTag(html, "og:image") ||
-        extractMetaTag(html, "twitter:image") ||
-        "";
-
-      setPreview({
-        title,
-        description,
-        image,
-        url,
-      });
+      const data = await response.json();
+      setPreview(data);
     } catch (e: any) {
-      console.error("Erreur:", e);
-
-      // Message spécifique pour les erreurs CORS courantes
-      if (e.message.includes("CORS") || e.name === "TypeError") {
-        setError(
-          "Cette page ne permet pas l'accès direct depuis le navigateur (erreur CORS). Utilisez un proxy serveur."
-        );
-      } else {
-        setError(e.message || "Erreur inconnue");
-      }
-
-      // Solution alternative si CORS échoue - au moins extraire le favicon
-      try {
-        const domain = new URL(url).hostname;
-        setPreview({
-          title: domain,
-          description:
-            "Impossible d'accéder aux métadonnées complètes à cause des restrictions CORS.",
-          image: `https://${domain}/favicon.ico`,
-          url: url,
-        });
-      } catch (faviconError) {
-        // Ignorer les erreurs de favicon
-      }
+      setError(e.message || "Erreur inconnue");
     } finally {
       setLoading(false);
     }
-  };
-
-  // Méthode alternative qui utilise une iframe pour tenter d'extraire les informations
-  // Cette approche peut fonctionner dans certains cas mais reste limitée par la sécurité
-  const fetchWithIframe = () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Créer une iframe temporaire
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
-
-      // Définir un timeout pour éviter de bloquer indéfiniment
-      const timeoutId = setTimeout(() => {
-        setError("Délai d'attente dépassé pour charger la page");
-        document.body.removeChild(iframe);
-        setLoading(false);
-      }, 5000);
-
-      // Essayer de charger l'URL dans l'iframe
-      iframe.onload = () => {
-        clearTimeout(timeoutId);
-
-        try {
-          // Tenter d'accéder au contenu de l'iframe (peut échouer à cause de la sécurité)
-          const iframeDoc =
-            iframe.contentDocument || iframe.contentWindow?.document;
-
-          if (!iframeDoc) {
-            throw new Error(
-              "Impossible d'accéder au contenu de la page (restrictions de sécurité)"
-            );
-          }
-
-          // Extraire les métadonnées directement du DOM
-          const title = iframeDoc.title || "Titre non disponible";
-
-          // Récupérer description depuis meta
-          let description = "Description non disponible";
-          const metaDesc = iframeDoc.querySelector('meta[name="description"]');
-          if (metaDesc) {
-            description = metaDesc.getAttribute("content") || description;
-          }
-
-          // Tenter de récupérer une image
-          let image = "";
-          const ogImage = iframeDoc.querySelector('meta[property="og:image"]');
-          if (ogImage) {
-            image = ogImage.getAttribute("content") || "";
-          }
-
-          setPreview({
-            title,
-            description,
-            image,
-            url,
-          });
-        } catch (e: any) {
-          setError(e.message || "Erreur lors de l'accès au contenu de la page");
-        } finally {
-          document.body.removeChild(iframe);
-          setLoading(false);
-        }
-      };
-
-      iframe.onerror = () => {
-        clearTimeout(timeoutId);
-        setError("Erreur lors du chargement de la page");
-        document.body.removeChild(iframe);
-        setLoading(false);
-      };
-
-      // Définir la source de l'iframe
-      iframe.src = url;
-    } catch (e: any) {
-      setError(e.message || "Erreur inconnue");
-      setLoading(false);
-    }
-  };
-
-  // Extraire le contenu d'une balise HTML
-  const extractTag = (html: string, tagName: string): string | null => {
-    const regex = new RegExp(`<${tagName}[^>]*>(.*?)<\/${tagName}>`, "i");
-    const match = html.match(regex);
-    return match && match[1] ? match[1].trim() : null;
-  };
-
-  // Extraire le contenu d'une balise meta
-  const extractMetaTag = (html: string, name: string): string | null => {
-    // Chercher d'abord dans property (pour Open Graph)
-    const propertyRegex = new RegExp(
-      `<meta[^>]*property=["']${name}["'][^>]*content=["']([^"']*)["'][^>]*>`,
-      "i"
-    );
-    let match = html.match(propertyRegex);
-
-    if (!match) {
-      // Ensuite chercher dans name (pour meta standards)
-      const nameRegex = new RegExp(
-        `<meta[^>]*name=["']${name}["'][^>]*content=["']([^"']*)["'][^>]*>`,
-        "i"
-      );
-      match = html.match(nameRegex);
-    }
-
-    return match && match[1] ? match[1].trim() : null;
   };
 
   // Remplit avec l'exemple
@@ -226,7 +71,7 @@ export default function LinkPreviewPage() {
   return (
     <ToolLayout
       title="Link Previewer"
-      description="Prévisualisez le titre, la description et l'image d'une page web à partir de son URL."
+      description="Preview the metadata of a link before sharing it."
     >
       <div className="grid gap-8">
         <Card>
@@ -273,15 +118,6 @@ export default function LinkPreviewPage() {
                     )}
                   </Button>
                 </div>
-                <div className="text-amber-600 bg-amber-50 p-2 rounded text-sm flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <strong>Note:</strong> Cette version tente de récupérer les
-                    données directement, mais de nombreux sites bloquent ce type
-                    d'accès (CORS). Pour une solution plus robuste, utilisez un
-                    proxy côté serveur.
-                  </div>
-                </div>
               </div>
               <div>
                 {error && (
@@ -297,7 +133,6 @@ export default function LinkPreviewPage() {
                         alt={preview.title || "Aperçu"}
                         className="w-32 h-32 object-cover rounded border"
                         onError={(e) => {
-                          // Fallback si l'image ne charge pas
                           (e.target as HTMLImageElement).style.display = "none";
                         }}
                       />
@@ -307,12 +142,28 @@ export default function LinkPreviewPage() {
                       </div>
                     )}
                     <div>
-                      <div className="font-bold text-lg mb-1">
-                        {preview.title}
+                      <div className="flex items-center gap-2 mb-1">
+                        {preview.favicon && (
+                          <img
+                            src={preview.favicon}
+                            alt="favicon"
+                            className="w-5 h-5 rounded"
+                            style={{ display: "inline-block" }}
+                          />
+                        )}
+                        <span className="font-bold text-lg">
+                          {preview.title}
+                        </span>
                       </div>
                       <div className="text-muted-foreground mb-2">
                         {preview.description}
                       </div>
+                      {preview.publishDate && (
+                        <div className="text-xs text-gray-500 mb-1">
+                          Publié le :{" "}
+                          {new Date(preview.publishDate).toLocaleString()}
+                        </div>
+                      )}
                       <a
                         href={preview.url}
                         target="_blank"
