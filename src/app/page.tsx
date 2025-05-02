@@ -227,14 +227,14 @@ export default function Home() {
               </CardHeader>
               <CardFooter>
                 <Button asChild className="w-full">
-                  <Link href={tool.href}>Ouvrir l'outil</Link>
+                  <Link href={tool.href}>Open Tool</Link>
                 </Button>
               </CardFooter>
             </Card>
           ))}
           {filteredTools.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground">
-              Aucun outil trouvé.
+              No tools found for "{searchTerm}". Try a different search term.
             </div>
           )}
         </section>

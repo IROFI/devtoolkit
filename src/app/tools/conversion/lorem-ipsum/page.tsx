@@ -12,8 +12,8 @@ import { toast } from "sonner";
 export default function LoremIpsumGeneratorPage() {
   return (
     <ToolLayout
-      title="Générateur de Lorem Ipsum"
-      description="Générez facilement du texte factice pour vos maquettes et prototypes."
+      title="Lorem Ipsum Generator"
+      description="Easily generate placeholder text for your mockups and prototypes."
     >
       <LoremIpsumGenerator />
     </ToolLayout>
@@ -88,8 +88,8 @@ function LoremIpsumGenerator() {
   const handleCopy = () => {
     navigator.clipboard
       .writeText(output)
-      .then(() => toast.success("Texte copié dans le presse-papiers"))
-      .catch(() => toast.error("Échec de la copie"));
+      .then(() => toast.success("Text copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   const handleExample = () => {
@@ -107,16 +107,16 @@ function LoremIpsumGenerator() {
             checked={autoUpdate}
             onCheckedChange={setAutoUpdate}
           />
-          <Label htmlFor="auto-update">Mise à jour automatique</Label>
+          <Label htmlFor="auto-update">Auto update</Label>
         </div>
         <div className="flex items-center space-x-2">
           {!autoUpdate && (
             <Button onClick={handleGenerate} size="sm">
-              Générer
+              Generate
             </Button>
           )}
           <Button onClick={handleExample} size="sm" variant="outline">
-            Exemple
+            Example
           </Button>
         </div>
       </div>
@@ -130,18 +130,18 @@ function LoremIpsumGenerator() {
             onChange={handleModeChange}
             className="border rounded px-2 py-1"
           >
-            <option value="paragraphs">Paragraphes</option>
-            <option value="words">Mots</option>
-            <option value="sentences">Phrases</option>
+            <option value="paragraphs">Paragraphs</option>
+            <option value="words">Words</option>
+            <option value="sentences">Sentences</option>
           </select>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="count-input">
             {mode === "paragraphs"
-              ? "Nombre de paragraphes"
+              ? "Number of paragraphs"
               : mode === "words"
-              ? "Nombre de mots"
-              : "Nombre de phrases"}
+              ? "Number of words"
+              : "Number of sentences"}
           </Label>
           <input
             id="count-input"
@@ -156,7 +156,7 @@ function LoremIpsumGenerator() {
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="output-textarea">Texte généré</Label>
+        <Label htmlFor="output-textarea">Generated text</Label>
         <Textarea
           id="output-textarea"
           value={output}
@@ -170,7 +170,7 @@ function LoremIpsumGenerator() {
             size="sm"
             onClick={handleCopy}
             className="h-8 w-8 p-0"
-            aria-label="Copier le texte généré"
+            aria-label="Copy generated text"
           >
             <ClipboardCopy className="h-4 w-4" />
           </Button>
@@ -179,10 +179,9 @@ function LoremIpsumGenerator() {
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p>
-          Utilisez ce générateur pour obtenir rapidement du texte factice (Lorem
-          Ipsum) à insérer dans vos maquettes, prototypes ou tests de mise en
-          page. Choisissez le nombre de paragraphes, de mots ou de phrases à
-          générer.
+          Use this generator to quickly get placeholder (Lorem Ipsum) text for
+          your mockups, prototypes, or layout tests. Choose the number of
+          paragraphs, words, or sentences to generate.
         </p>
       </div>
     </div>

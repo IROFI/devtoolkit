@@ -14,12 +14,12 @@ export default function JsonCsvConverterPage() {
   return (
     <ToolLayout
       title="JSON ↔ CSV Converter"
-      description="Convertissez instantanément entre les formats JSON et CSV."
+      description="Instantly convert between JSON and CSV formats."
     >
       <Tabs defaultValue="json-to-csv">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="json-to-csv">JSON vers CSV</TabsTrigger>
-          <TabsTrigger value="csv-to-json">CSV vers JSON</TabsTrigger>
+          <TabsTrigger value="json-to-csv">JSON to CSV</TabsTrigger>
+          <TabsTrigger value="csv-to-json">CSV to JSON</TabsTrigger>
         </TabsList>
         <TabsContent value="json-to-csv">
           <JsonToCsv />
@@ -47,12 +47,12 @@ function JsonToCsv() {
 
     try {
       const jsonObj = JSON.parse(json);
-      // PapaParse attend un tableau d'objets
+      // PapaParse expects an array of objects
       const data = Array.isArray(jsonObj) ? jsonObj : [jsonObj];
       const csv = Papa.unparse(data, { quotes: false });
       setCsvOutput(csv);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Format JSON invalide");
+      setError(err instanceof Error ? err.message : "Invalid JSON format");
     }
   }, [json]);
 
@@ -66,8 +66,8 @@ function JsonToCsv() {
     if (!csvOutput) return;
     navigator.clipboard
       .writeText(csvOutput)
-      .then(() => toast.success("CSV copié dans le presse-papier"))
-      .catch(() => toast.error("Échec de la copie"));
+      .then(() => toast.success("CSV copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   const loadSampleJson = () => {
@@ -86,19 +86,19 @@ function JsonToCsv() {
     <div className="grid gap-6 mt-4">
       <div className="grid gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="json-input">Entrée JSON</Label>
+          <Label htmlFor="json-input">JSON Input</Label>
           <Button
             variant="outline"
             size="sm"
             onClick={loadSampleJson}
             className="h-8 px-2"
           >
-            Exemple
+            Example
           </Button>
         </div>
         <Textarea
           id="json-input"
-          placeholder="Collez ici un tableau JSON..."
+          placeholder="Paste a JSON array here..."
           value={json}
           onChange={(e) => setJson(e.target.value)}
           rows={10}
@@ -114,7 +114,7 @@ function JsonToCsv() {
 
       <div className="grid gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="csv-output">Sortie CSV</Label>
+          <Label htmlFor="csv-output">CSV Output</Label>
           {csvOutput && (
             <div className="flex space-x-2">
               <Button
@@ -124,7 +124,7 @@ function JsonToCsv() {
                 className="h-8 px-2"
               >
                 <ClipboardCopy className="h-4 w-4 mr-2" />
-                Copier
+                Copy
               </Button>
             </div>
           )}
@@ -135,7 +135,7 @@ function JsonToCsv() {
           value={csvOutput}
           rows={10}
           className="font-mono text-sm resize-none"
-          placeholder="Le CSV apparaîtra ici..."
+          placeholder="CSV will appear here..."
         />
       </div>
     </div>
@@ -167,7 +167,7 @@ function CsvToJson() {
       const json = JSON.stringify(result.data, null, isPretty ? 2 : 0);
       setJsonOutput(json);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Format CSV invalide");
+      setError(err instanceof Error ? err.message : "Invalid CSV format");
     }
   }, [csvInput, isPretty]);
 
@@ -181,8 +181,8 @@ function CsvToJson() {
     if (!jsonOutput) return;
     navigator.clipboard
       .writeText(jsonOutput)
-      .then(() => toast.success("JSON copié dans le presse-papier"))
-      .catch(() => toast.error("Échec de la copie"));
+      .then(() => toast.success("JSON copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   const loadSampleCsv = () => {
@@ -196,19 +196,19 @@ Bob,25,Lyon`;
     <div className="grid gap-6 mt-4">
       <div className="grid gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="csv-input">Entrée CSV</Label>
+          <Label htmlFor="csv-input">CSV Input</Label>
           <Button
             variant="outline"
             size="sm"
             onClick={loadSampleCsv}
             className="h-8 px-2"
           >
-            Exemple
+            Example
           </Button>
         </div>
         <Textarea
           id="csv-input"
-          placeholder="Collez ici du CSV..."
+          placeholder="Paste CSV here..."
           value={csvInput}
           onChange={(e) => setCsvInput(e.target.value)}
           rows={10}
@@ -224,7 +224,7 @@ Bob,25,Lyon`;
 
       <div className="grid gap-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="json-output">Sortie JSON</Label>
+          <Label htmlFor="json-output">JSON Output</Label>
           {jsonOutput && (
             <div className="flex space-x-2">
               <Button
@@ -234,7 +234,7 @@ Bob,25,Lyon`;
                 className="h-8 px-2"
               >
                 <ClipboardCopy className="h-4 w-4 mr-2" />
-                Copier
+                Copy
               </Button>
             </div>
           )}
@@ -245,7 +245,7 @@ Bob,25,Lyon`;
           value={jsonOutput}
           rows={10}
           className="font-mono text-sm resize-none"
-          placeholder="Le JSON apparaîtra ici..."
+          placeholder="JSON will appear here..."
         />
       </div>
     </div>

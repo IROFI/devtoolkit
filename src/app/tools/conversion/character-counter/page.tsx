@@ -31,7 +31,7 @@ function countSentences(text: string) {
 }
 
 function countParagraphs(text: string) {
-  // Un paragraphe est séparé par deux retours à la ligne ou plus
+  // A paragraph is separated by two or more line breaks
   return text
     .trim()
     .split(/\n{2,}/)
@@ -48,11 +48,11 @@ function CharacterCounter() {
     paragraphs: 0,
   });
 
-  const exampleText = `Ceci est un exemple de texte.
-Il contient plusieurs phrases. En voici une autre !
-Et même un paragraphe supplémentaire.
+  const exampleText = `This is a sample text.
+It contains several sentences. Here is another one!
+And even an extra paragraph.
 
-Voici un nouveau paragraphe pour tester le compteur.`;
+Here is a new paragraph to test the counter.`;
 
   const calculateCounts = (value: string) => {
     setCounts({
@@ -78,8 +78,8 @@ Voici un nouveau paragraphe pour tester le compteur.`;
   const handleCopy = (type: keyof typeof counts) => {
     navigator.clipboard
       .writeText(String(counts[type]))
-      .then(() => toast.success("Copié dans le presse-papiers"))
-      .catch(() => toast.error("Échec de la copie"));
+      .then(() => toast.success("Copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   const handleExample = () => {
@@ -96,25 +96,25 @@ Voici un nouveau paragraphe pour tester le compteur.`;
             checked={autoUpdate}
             onCheckedChange={setAutoUpdate}
           />
-          <Label htmlFor="auto-update">Mise à jour automatique</Label>
+          <Label htmlFor="auto-update">Auto update</Label>
         </div>
         <div className="flex items-center space-x-2">
           {!autoUpdate && (
             <Button onClick={handleCount} size="sm">
-              Compter
+              Count
             </Button>
           )}
           <Button onClick={handleExample} size="sm" variant="outline">
-            Exemple
+            Example
           </Button>
         </div>
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="text-input">Votre texte</Label>
+        <Label htmlFor="text-input">Your text</Label>
         <Textarea
           id="text-input"
-          placeholder="Saisissez ou collez votre texte ici..."
+          placeholder="Type or paste your text here..."
           value={input}
           onChange={handleInputChange}
           rows={8}
@@ -124,22 +124,22 @@ Voici un nouveau paragraphe pour tester le compteur.`;
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          label="Caractères"
+          label="Characters"
           value={counts.characters}
           onCopy={() => handleCopy("characters")}
         />
         <StatCard
-          label="Mots"
+          label="Words"
           value={counts.words}
           onCopy={() => handleCopy("words")}
         />
         <StatCard
-          label="Phrases"
+          label="Sentences"
           value={counts.sentences}
           onCopy={() => handleCopy("sentences")}
         />
         <StatCard
-          label="Paragraphes"
+          label="Paragraphs"
           value={counts.paragraphs}
           onCopy={() => handleCopy("paragraphs")}
         />
@@ -147,9 +147,9 @@ Voici un nouveau paragraphe pour tester le compteur.`;
 
       <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
         <p>
-          Ce compteur analyse votre texte et affiche le nombre de caractères,
-          mots, phrases et paragraphes. Pratique pour la rédaction, le SEO ou la
-          limitation de champs de saisie.
+          This counter analyzes your text and displays the number of characters,
+          words, sentences, and paragraphs. Useful for writing, SEO, or input
+          field limits.
         </p>
       </div>
     </div>
@@ -174,7 +174,7 @@ function StatCard({
           size="icon"
           onClick={onCopy}
           className="h-6 w-6 p-0"
-          aria-label={`Copier le nombre de ${label.toLowerCase()}`}
+          aria-label={`Copy number of ${label.toLowerCase()}`}
         >
           <ClipboardCopy className="h-4 w-4" />
         </Button>

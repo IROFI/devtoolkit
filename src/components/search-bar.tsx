@@ -20,11 +20,10 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       </span>
       <input
         type="text"
-        placeholder="Rechercher un outil..."
+        placeholder="Search a tool..."
         className="flex-1 px-3 py-2 bg-transparent border-none focus:outline-none rounded-full"
         onChange={handleChange}
       />
-      {/* Le bouton est supprimé pour une recherche instantanée */}
     </form>
   );
 }

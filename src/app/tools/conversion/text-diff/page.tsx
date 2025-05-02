@@ -41,16 +41,16 @@ function diffLines(a: string, b: string) {
   return result;
 }
 
-const EXAMPLE_A = `Bonjour,
-Voici un exemple de texte.
-Il contient plusieurs lignes.
-Certaines lignes seront modifiées.`;
+const EXAMPLE_A = `Hello,
+Here is a sample text.
+It contains several lines.
+Some lines will be changed.`;
 
-const EXAMPLE_B = `Bonjour,
-Voici un exemple de texte modifié.
-Il contient plusieurs lignes.
-Certaines lignes ont été modifiées.
-Et une ligne ajoutée !`;
+const EXAMPLE_B = `Hello,
+Here is a modified sample text.
+It contains several lines.
+Some lines have been changed.
+And a line was added!`;
 
 export default function TextDiffPage() {
   const [textA, setTextA] = useState("");
@@ -69,16 +69,16 @@ export default function TextDiffPage() {
 
   return (
     <ToolLayout
-      title="Comparateur de texte (Diff)"
-      description="Comparez deux textes et visualisez les différences ligne par ligne, à la manière de GitHub."
+      title="Text Diff Tool"
+      description="Compare two texts and view line-by-line differences, GitHub style."
     >
       <div className="grid gap-6 mt-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="text-a">Texte A</Label>
+            <Label htmlFor="text-a">Text A</Label>
             <Textarea
               id="text-a"
-              placeholder="Collez ou saisissez le premier texte..."
+              placeholder="Paste or type the first text here..."
               value={textA}
               onChange={(e) => setTextA(e.target.value)}
               rows={8}
@@ -86,10 +86,10 @@ export default function TextDiffPage() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="text-b">Texte B</Label>
+            <Label htmlFor="text-b">Text B</Label>
             <Textarea
               id="text-b"
-              placeholder="Collez ou saisissez le second texte..."
+              placeholder="Paste or type the second text here..."
               value={textB}
               onChange={(e) => setTextB(e.target.value)}
               rows={8}
@@ -98,9 +98,9 @@ export default function TextDiffPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={handleCompare}>Comparer</Button>
+          <Button onClick={handleCompare}>Compare</Button>
           <Button variant="secondary" onClick={handleExample}>
-            Exemple
+            Example
           </Button>
         </div>
         {diff && (
@@ -141,10 +141,10 @@ export default function TextDiffPage() {
         )}
         <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
           <p>
-            <strong>Comparateur de texte</strong> : visualisez les différences
-            entre deux textes. Les lignes supprimées sont en{" "}
-            <span className="text-red-700">rouge</span>, les lignes ajoutées en{" "}
-            <span className="text-green-700">vert</span>.
+            <strong>Text Diff Tool</strong>: visualize the differences between
+            two texts. Removed lines are shown in{" "}
+            <span className="text-red-700">red</span>, added lines in{" "}
+            <span className="text-green-700">green</span>.
           </p>
         </div>
       </div>
