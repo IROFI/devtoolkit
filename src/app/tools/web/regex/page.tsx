@@ -9,24 +9,24 @@ import { ClipboardCopy, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-// Exemples prédéfinis
+// Predefined examples
 const EXAMPLES = [
   {
     regex: "\\b\\w+@\\w+\\.\\w+\\b",
     flags: "g",
-    text: "Contactez-nous à test@example.com ou admin@site.org.",
-    description: "Adresse email",
+    text: "Contact us at test@example.com or admin@site.org.",
+    description: "Email address",
   },
   {
     regex: "\\d{4}-\\d{2}-\\d{2}",
     flags: "",
-    text: "La date du jour est 2024-06-01.",
-    description: "Date au format YYYY-MM-DD",
+    text: "Today's date is 2024-06-01.",
+    description: "Date in YYYY-MM-DD format",
   },
   {
     regex: "(https?://\\S+)",
     flags: "g",
-    text: "Visitez https://github.com ou http://example.com.",
+    text: "Visit https://github.com or http://example.com.",
     description: "URL",
   },
 ];
@@ -38,7 +38,7 @@ export default function RegexTesterPage() {
   const [matches, setMatches] = useState<RegExpMatchArray | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Met à jour le résultat à chaque changement
+  // Updates result on every change
   useEffect(() => {
     if (!regex) {
       setMatches(null);
@@ -56,27 +56,27 @@ export default function RegexTesterPage() {
     }
   }, [regex, flags, text]);
 
-  // Génère un exemple aléatoire
+  // Generate a random example
   const generateExample = () => {
     const ex = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
     setRegex(ex.regex);
     setFlags(ex.flags);
     setText(ex.text);
-    toast.info(`Exemple : ${ex.description}`);
+    toast.info(`Example: ${ex.description}`);
   };
 
-  // Copier dans le presse-papier
+  // Copy to clipboard
   const copyToClipboard = (value: string) => {
     navigator.clipboard
       .writeText(value)
-      .then(() => toast.success("Copié dans le presse-papier"))
-      .catch(() => toast.error("Erreur lors de la copie"));
+      .then(() => toast.success("Copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   return (
     <ToolLayout
-      title="Testeur de Regex"
-      description="Testez vos expressions régulières en temps réel. Saisissez une regex, un texte, et voyez les correspondances."
+      title="Regex Tester"
+      description="Test your regular expressions in real time. Enter a regex, some text, and see the matches."
     >
       <div className="grid gap-8">
         <Card>
@@ -84,21 +84,21 @@ export default function RegexTesterPage() {
             <div className="grid gap-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium">
-                  Testeur d'expressions régulières
+                  Regular Expression Tester
                 </h3>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={generateExample}
                   className="h-8 px-2"
-                  title="Générer un exemple"
+                  title="Generate example"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Générer un exemple
+                  Generate example
                 </Button>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="regex-input">Expression régulière</Label>
+                <Label htmlFor="regex-input">Regular expression</Label>
                 <div className="flex gap-2">
                   <Input
                     id="regex-input"
@@ -120,11 +120,11 @@ export default function RegexTesterPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="text-input">Texte à tester</Label>
+                <Label htmlFor="text-input">Text to test</Label>
                 <Input
                   id="text-input"
                   type="text"
-                  placeholder="Saisissez le texte à tester..."
+                  placeholder="Enter the text to test..."
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   className="font-mono"
@@ -138,7 +138,7 @@ export default function RegexTesterPage() {
                   className="h-6 px-2 text-xs mr-2"
                 >
                   <ClipboardCopy className="h-3 w-3 mr-1" />
-                  Copier la regex
+                  Copy regex
                 </Button>
                 <Button
                   variant="ghost"
@@ -147,22 +147,22 @@ export default function RegexTesterPage() {
                   className="h-6 px-2 text-xs"
                 >
                   <ClipboardCopy className="h-3 w-3 mr-1" />
-                  Copier le texte
+                  Copy text
                 </Button>
               </div>
               <div>
                 {error && (
                   <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
-                    Erreur : {error}
+                    Error: {error}
                   </div>
                 )}
                 {!error && regex && (
                   <div className="mt-4">
-                    <Label>Résultat :</Label>
+                    <Label>Result:</Label>
                     {matches ? (
                       <div className="p-2 bg-muted rounded font-mono text-sm">
                         {matches.length === 0 ? (
-                          "Aucune correspondance"
+                          "No match"
                         ) : (
                           <ul className="list-disc pl-5">
                             {matches.map((m, i) => (
@@ -173,7 +173,7 @@ export default function RegexTesterPage() {
                       </div>
                     ) : (
                       <div className="p-2 text-muted-foreground text-sm">
-                        Aucune correspondance
+                        No match
                       </div>
                     )}
                   </div>

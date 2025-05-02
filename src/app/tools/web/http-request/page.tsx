@@ -122,14 +122,14 @@ export default function HttpRequestPage() {
   const copyToClipboard = (value: string) => {
     navigator.clipboard
       .writeText(value)
-      .then(() => toast.success("Copié dans le presse-papier"))
-      .catch(() => toast.error("Erreur lors de la copie"));
+      .then(() => toast.success("Copied to clipboard"))
+      .catch(() => toast.error("Copy failed"));
   };
 
   return (
     <ToolLayout
       title="HTTP Request Tester"
-      description="Testez des requêtes HTTP (GET, POST, etc) en temps réel. Saisissez une URL, des headers, un body, et voyez la réponse."
+      description="Test HTTP requests (GET, POST, etc.) in real time. Enter a URL, headers, a body, and see the response."
     >
       <div className="grid gap-8">
         <Card>
@@ -155,16 +155,16 @@ export default function HttpRequestPage() {
                     size="sm"
                     onClick={generateRandomExample}
                     className="h-8 px-2"
-                    title="Générer un exemple aléatoire"
+                    title="Generate a random example"
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    Aléatoire
+                    Random
                   </Button>
                 </div>
               </div>
               <div className="flex gap-2 items-end">
                 <div>
-                  <Label htmlFor="method-select">Méthode</Label>
+                  <Label htmlFor="method-select">Method</Label>
                   <select
                     id="method-select"
                     className="border rounded px-2 py-1 font-mono"
@@ -194,12 +194,12 @@ export default function HttpRequestPage() {
                   disabled={loading || !url}
                   className="h-10"
                 >
-                  {loading ? "Envoi..." : "Envoyer"}
+                  {loading ? "Sending..." : "Send"}
                 </Button>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="headers-input">
-                  Headers (clé: valeur, un par ligne)
+                  Headers (key: value, one per line)
                 </Label>
                 <textarea
                   id="headers-input"
@@ -231,7 +231,7 @@ export default function HttpRequestPage() {
                   className="h-6 px-2 text-xs mr-2"
                 >
                   <ClipboardCopy className="h-3 w-3 mr-1" />
-                  Copier l'URL
+                  Copy URL
                 </Button>
                 <Button
                   variant="ghost"
@@ -240,7 +240,7 @@ export default function HttpRequestPage() {
                   className="h-6 px-2 text-xs mr-2"
                 >
                   <ClipboardCopy className="h-3 w-3 mr-1" />
-                  Copier les headers
+                  Copy headers
                 </Button>
                 {body && (
                   <Button
@@ -250,19 +250,19 @@ export default function HttpRequestPage() {
                     className="h-6 px-2 text-xs"
                   >
                     <ClipboardCopy className="h-3 w-3 mr-1" />
-                    Copier le body
+                    Copy body
                   </Button>
                 )}
               </div>
               <div>
                 {error && (
                   <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
-                    Erreur : {error}
+                    Error: {error}
                   </div>
                 )}
                 {status !== null && (
                   <div className="mb-2 text-sm">
-                    Statut :{" "}
+                    Status:{" "}
                     <span
                       className={
                         status >= 200 && status < 300
@@ -276,7 +276,7 @@ export default function HttpRequestPage() {
                 )}
                 {response && (
                   <div className="mt-2">
-                    <Label>Réponse :</Label>
+                    <Label>Response:</Label>
                     <pre className="p-2 bg-muted rounded font-mono text-sm overflow-x-auto max-h-96">
                       {response}
                     </pre>
