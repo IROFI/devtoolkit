@@ -12,7 +12,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <form
-      className="flex items-center gap-2 max-w-md mx-auto mb-8 bg-white rounded-full shadow px-4 py-2 border"
+      className="flex items-center gap-2 max-w-md mx-auto mt-8 bg-white rounded-full shadow px-4 py-2 border"
       onSubmit={(e) => e.preventDefault()}
     >
       <span className="text-muted-foreground">

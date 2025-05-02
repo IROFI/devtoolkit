@@ -201,7 +201,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <MainNav />
       <main className="flex-1 container mx-auto py-8 px-4 md:px-4">
-        <section className="py-12 md:py-4 lg:py-20 text-center">
+        <section className="py-6 md:py-4 lg:py-4 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
             DevToolkit
           </h1>
@@ -210,12 +210,12 @@ export default function Home() {
             workflow. All tools work directly in your browser with no data sent
             to servers.
           </p>
-          <div className="mt-8">
+          <div className="mt-4">
             <SearchBar onSearch={setSearchTerm} />
           </div>
         </section>
 
-        <section className="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {filteredTools.map((tool) => (
             <Card key={tool.href} className="h-full">
               <CardHeader>
