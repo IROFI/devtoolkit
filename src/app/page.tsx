@@ -1,5 +1,7 @@
+"use client";
+
 import { MainNav } from "@/components/main-nav";
-import { SearchBar } from "@/components/search-bar"; // Ajout de l'import du composant de recherche
+import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,38 +11,191 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useState } from "react";
+
+// Nouvelle structure toolCategories avec items détaillés
+const toolCategories = [
+  {
+    title: "Security & Encoding",
+    items: [
+      {
+        name: "Text Hasher",
+        href: "/tools/security/hasher",
+        description: "Hash text with various algorithms.",
+      },
+      {
+        name: "JWT Encoder/Decoder",
+        href: "/tools/security/jwt",
+        description: "Encode and decode JWT tokens.",
+      },
+      {
+        name: "Password Strength",
+        href: "/tools/security/password-strength",
+        description: "Check password strength.",
+      },
+      {
+        name: "Password Generator",
+        href: "/tools/security/password-generator",
+        description: "Generate secure passwords.",
+      },
+    ],
+  },
+  {
+    title: "Data & Conversion",
+    items: [
+      {
+        name: "JSON ↔ YAML",
+        href: "/tools/conversion/json-yaml",
+        description: "Convert between JSON and YAML.",
+      },
+      {
+        name: "JSON ↔ CSV",
+        href: "/tools/conversion/json-csv",
+        description: "Convert between JSON and CSV.",
+      },
+      {
+        name: "Base64 Encoder/Decoder",
+        href: "/tools/conversion/base64",
+        description: "Encode/decode Base64.",
+      },
+      {
+        name: "URL Encoder/Decoder",
+        href: "/tools/conversion/url",
+        description: "Encode/decode URLs.",
+      },
+      {
+        name: "Image Converter",
+        href: "/tools/conversion/image-converter",
+        description: "Convert images between formats.",
+      },
+      {
+        name: "Text Diff Checker",
+        href: "/tools/conversion/text-diff",
+        description: "Compare text differences.",
+      },
+      {
+        name: "Character Counter",
+        href: "/tools/conversion/character-counter",
+        description: "Count characters in text.",
+      },
+      {
+        name: "Lorem Ipsum Generator",
+        href: "/tools/conversion/lorem-ipsum",
+        description: "Generate placeholder text.",
+      },
+    ],
+  },
+  {
+    title: "Web & Dev Tools",
+    items: [
+      {
+        name: "Timestamp Converter",
+        href: "/tools/web/timestamp",
+        description: "Convert timestamps to dates.",
+      },
+      {
+        name: "JSON Formatter",
+        href: "/tools/web/json-formatter",
+        description: "Format JSON data.",
+      },
+      {
+        name: "Regex Tester",
+        href: "/tools/web/regex",
+        description: "Test regular expressions.",
+      },
+      {
+        name: "HTTP Request Tester",
+        href: "/tools/web/http-request",
+        description: "Test HTTP requests.",
+      },
+      {
+        name: "Link Previewer",
+        href: "/tools/web/link-preview",
+        description: "Preview web links.",
+      },
+      {
+        name: "CSS Minifier",
+        href: "/tools/web/css-minifier",
+        description: "Minify CSS code.",
+      },
+      {
+        name: "CSS / Tailwind Unit Converter",
+        href: "/tools/web/css-tailwind-unit-converter",
+        description: "Convert CSS units.",
+      },
+    ],
+  },
+  {
+    title: "Visual & UI Tools",
+    items: [
+      {
+        name: "Color Picker",
+        href: "/tools/visual/color-picker",
+        description: "Pick colors visually.",
+      },
+      {
+        name: "Color Palette Generator",
+        href: "/tools/visual/color-palet-generator",
+        description: "Generate color palettes.",
+      },
+      {
+        name: "CSS Gradient Generator",
+        href: "/tools/visual/gradient-generator",
+        description: "Create CSS gradients.",
+      },
+      {
+        name: "Box Shadow",
+        href: "/tools/visual/box-shadow",
+        description: "Generate CSS box shadows.",
+      },
+      {
+        name: "Grid Layout Generator",
+        href: "/tools/visual/grid-layout-generator",
+        description: "Create CSS grid layouts.",
+      },
+      {
+        name: "Markdown Previewer",
+        href: "/tools/visual/markdown",
+        description: "Preview Markdown.",
+      },
+      {
+        name: "Image to Base64",
+        href: "/tools/visual/image-base64",
+        description: "Convert images to Base64.",
+      },
+      {
+        name: "Image Compressor",
+        href: "/tools/visual/image-compressor",
+        description: "Compress images.",
+      },
+      {
+        name: "Sprite Generator",
+        href: "/tools/visual/sprite-generator",
+        description: "Generate image sprites.",
+      },
+    ],
+  },
+];
 
 export default function Home() {
-  const toolCategories = [
-    {
-      title: "Security & Encoding",
-      description:
-        "Hash text, encode/decode JWT, check password strength, and generate secure passwords.",
-      href: "/tools/security/hasher",
-      iconClass: "i-lucide-shield",
-    },
-    {
-      title: "Data & Conversion",
-      description:
-        "Convert between JSON, YAML, CSV formats, and encode/decode Base64 and URLs.",
-      href: "/tools/conversion/json-yaml",
-      iconClass: "i-lucide-file-json",
-    },
-    {
-      title: "Web & Dev Tools",
-      description:
-        "Convert timestamps, format JSON, test regex patterns, and try HTTP requests.",
-      href: "/tools/web/timestamp",
-      iconClass: "i-lucide-code",
-    },
-    {
-      title: "Visual & UI Tools",
-      description:
-        "Pick colors, generate CSS gradients, preview Markdown, and convert images to Base64.",
-      href: "/tools/visual/color-picker",
-      iconClass: "i-lucide-palette",
-    },
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // On aplatit tous les items pour la recherche
+  const allTools = toolCategories.flatMap((category) =>
+    category.items.map((item) => ({
+      ...item,
+      category: category.title,
+    }))
+  );
+
+  // Filtrage sur le nom, la catégorie ou la description
+  const filteredTools = allTools.filter(
+    (tool) =>
+      tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tool.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (tool.description &&
+        tool.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -56,24 +211,32 @@ export default function Home() {
             to servers.
           </p>
           <div className="mt-8">
-            <SearchBar />
+            <SearchBar onSearch={setSearchTerm} />
           </div>
         </section>
 
         <section className="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {toolCategories.map((category) => (
-            <Card key={category.title} className="h-full">
+          {filteredTools.map((tool) => (
+            <Card key={tool.href} className="h-full">
               <CardHeader>
-                <CardTitle>{category.title}</CardTitle>
-                <CardDescription>{category.description}</CardDescription>
+                <CardTitle>{tool.name}</CardTitle>
+                <CardDescription>
+                  <span className="block font-semibold">{tool.category}</span>
+                  {tool.description}
+                </CardDescription>
               </CardHeader>
               <CardFooter>
                 <Button asChild className="w-full">
-                  <Link href={category.href}>Explore Tools</Link>
+                  <Link href={tool.href}>Ouvrir l'outil</Link>
                 </Button>
               </CardFooter>
             </Card>
           ))}
+          {filteredTools.length === 0 && (
+            <div className="col-span-full text-center text-muted-foreground">
+              Aucun outil trouvé.
+            </div>
+          )}
         </section>
 
         <section className="py-8 text-center">
