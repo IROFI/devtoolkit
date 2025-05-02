@@ -20,26 +20,69 @@ export default function LoremIpsumGeneratorPage() {
   );
 }
 
-function generateLoremIpsum(paragraphs: number): string {
-  const base = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.`;
-  return Array.from({ length: paragraphs }, () => base).join("\n\n");
+const BASE_PARAGRAPH = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.`;
+
+function splitIntoSentences(text: string): string[] {
+  return text.match(/[^.!?]+[.!?]+/g) || [];
+}
+
+function splitIntoWords(text: string): string[] {
+  return text
+    .replace(/[.,!?;]/g, "")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function generateLoremIpsum(
+  mode: "paragraphs" | "words" | "sentences",
+  count: number
+): string {
+  if (mode === "paragraphs") {
+    return Array.from({ length: count }, () => BASE_PARAGRAPH).join("\n\n");
+  }
+  if (mode === "sentences") {
+    const sentences = splitIntoSentences(BASE_PARAGRAPH);
+    let result: string[] = [];
+    while (result.length < count) {
+      result = result.concat(sentences);
+    }
+    return result.slice(0, count).join(" ");
+  }
+  // mode === "words"
+  const words = splitIntoWords(BASE_PARAGRAPH);
+  let result: string[] = [];
+  while (result.length < count) {
+    result = result.concat(words);
+  }
+  return result.slice(0, count).join(" ") + ".";
 }
 
 function LoremIpsumGenerator() {
-  const [paragraphs, setParagraphs] = useState(3);
-  const [output, setOutput] = useState(generateLoremIpsum(3));
+  const [mode, setMode] = useState<"paragraphs" | "words" | "sentences">(
+    "paragraphs"
+  );
+  const [count, setCount] = useState(3);
+  const [output, setOutput] = useState(generateLoremIpsum("paragraphs", 3));
   const [autoUpdate, setAutoUpdate] = useState(true);
 
-  const handleParagraphsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(1, Math.min(20, Number(e.target.value) || 1));
-    setParagraphs(value);
+  const handleModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newMode = e.target.value as "paragraphs" | "words" | "sentences";
+    setMode(newMode);
     if (autoUpdate) {
-      setOutput(generateLoremIpsum(value));
+      setOutput(generateLoremIpsum(newMode, count));
+    }
+  };
+
+  const handleCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(1, Math.min(100, Number(e.target.value) || 1));
+    setCount(value);
+    if (autoUpdate) {
+      setOutput(generateLoremIpsum(mode, value));
     }
   };
 
   const handleGenerate = () => {
-    setOutput(generateLoremIpsum(paragraphs));
+    setOutput(generateLoremIpsum(mode, count));
   };
 
   const handleCopy = () => {
@@ -50,8 +93,9 @@ function LoremIpsumGenerator() {
   };
 
   const handleExample = () => {
-    setParagraphs(3);
-    setOutput(generateLoremIpsum(3));
+    setMode("paragraphs");
+    setCount(3);
+    setOutput(generateLoremIpsum("paragraphs", 3));
   };
 
   return (
@@ -77,17 +121,38 @@ function LoremIpsumGenerator() {
         </div>
       </div>
 
-      <div className="grid gap-2">
-        <Label htmlFor="paragraphs-input">Nombre de paragraphes</Label>
-        <input
-          id="paragraphs-input"
-          type="number"
-          min={1}
-          max={20}
-          value={paragraphs}
-          onChange={handleParagraphsChange}
-          className="w-24 border rounded px-2 py-1"
-        />
+      <div className="grid gap-2 md:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="mode-select">Mode</Label>
+          <select
+            id="mode-select"
+            value={mode}
+            onChange={handleModeChange}
+            className="border rounded px-2 py-1"
+          >
+            <option value="paragraphs">Paragraphes</option>
+            <option value="words">Mots</option>
+            <option value="sentences">Phrases</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="count-input">
+            {mode === "paragraphs"
+              ? "Nombre de paragraphes"
+              : mode === "words"
+              ? "Nombre de mots"
+              : "Nombre de phrases"}
+          </Label>
+          <input
+            id="count-input"
+            type="number"
+            min={1}
+            max={mode === "paragraphs" ? 20 : 100}
+            value={count}
+            onChange={handleCountChange}
+            className="w-32 border rounded px-2 py-1"
+          />
+        </div>
       </div>
 
       <div className="grid gap-2">
@@ -116,7 +181,8 @@ function LoremIpsumGenerator() {
         <p>
           Utilisez ce générateur pour obtenir rapidement du texte factice (Lorem
           Ipsum) à insérer dans vos maquettes, prototypes ou tests de mise en
-          page.
+          page. Choisissez le nombre de paragraphes, de mots ou de phrases à
+          générer.
         </p>
       </div>
     </div>
